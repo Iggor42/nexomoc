@@ -18,7 +18,12 @@ import {
   PlusCircle,
   Menu,
   X,
-  FileText
+  FileText,
+  Hammer,
+  Laptop,
+  Scissors,
+  GraduationCap,
+  Wrench
 } from "lucide-react";
 
 export default function Home() {
@@ -124,6 +129,19 @@ export default function Home() {
   };
 
   const handleHeroFindContractorClick = () => {
+    document.getElementById("freelancer-directory").scrollIntoView({ behavior: "smooth" });
+  };
+
+  const featuredCategories = [
+    { name: "Construção e Reformas", icon: Hammer, desc: "Pedreiros, pintores, eletricistas e encanadores." },
+    { name: "Design e Tecnologia", icon: Laptop, desc: "Web designers, devs, social media e marketing." },
+    { name: "Beleza e Bem-Estar", icon: Scissors, desc: "Manicures, cabeleireiros, maquiadores e estética." },
+    { name: "Educação", icon: GraduationCap, desc: "Professores particulares, reforço e cursos." },
+    { name: "Serviços Domésticos", icon: Wrench, desc: "Diaristas, montadores, jardineiros e mais." }
+  ];
+
+  const handleCategorySelect = (categoryName) => {
+    setSelectedCategory(categoryName);
     document.getElementById("freelancer-directory").scrollIntoView({ behavior: "smooth" });
   };
 
@@ -333,6 +351,44 @@ export default function Home() {
           <p className="text-base sm:text-lg italic text-[#191919]/80 font-light max-w-2xl mx-auto border-t border-[#191919]/10 pt-8">
             A demanda por serviços existe. Os talentos locais estão aqui. O NexoMoc é a ponte direta de conexão.
           </p>
+        </div>
+      </section>
+
+      {/* FEATURED CATEGORIES SECTION */}
+      <section id="categorias-destaque" className="py-24 px-6 max-w-7xl mx-auto scroll-mt-20">
+        <div className="text-center mb-16">
+          <span className="text-xs uppercase tracking-[0.25em] text-muted-foreground block mb-3">Explore por Área</span>
+          <h2 className="text-3xl font-light uppercase tracking-wide text-[#E0DCD1] mb-6">
+            Categorias em destaque
+          </h2>
+          <p className="text-sm sm:text-base text-muted-foreground font-light max-w-2xl mx-auto">
+            Encontre o profissional certo em um clique. Escolha a categoria e veja os talentos locais disponíveis.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredCategories.map((cat) => {
+            const Icon = cat.icon;
+            return (
+              <button
+                key={cat.name}
+                onClick={() => handleCategorySelect(cat.name)}
+                data-testid={`featured-category-${cat.name.toLowerCase().replace(/[^a-z0-9]/g, "-")}`}
+                className="group text-left bg-[#1f1f1f] border border-[#465242] p-8 hover:border-[#E0DCD1] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4"
+              >
+                <span className="w-12 h-12 rounded-full border border-[#465242] flex items-center justify-center text-[#E0DCD1] group-hover:bg-[#465242] transition-colors">
+                  <Icon className="w-5 h-5" />
+                </span>
+                <h3 className="font-bold text-[#E0DCD1] uppercase tracking-wider text-sm group-hover:text-white transition-colors">
+                  {cat.name}
+                </h3>
+                <p className="text-sm font-light text-muted-foreground flex-1">{cat.desc}</p>
+                <span className="text-xs uppercase tracking-widest text-[#bebaa9] flex items-center gap-1.5 group-hover:gap-3 transition-all">
+                  Ver profissionais <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </button>
+            );
+          })}
         </div>
       </section>
 
