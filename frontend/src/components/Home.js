@@ -50,6 +50,9 @@ export default function Home() {
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Per-category professional counts (for featured categories)
+  const [categoryCounts, setCategoryCounts] = useState({});
+
   const categories = [
     "Todos",
     "Construção e Reformas",
@@ -87,6 +90,26 @@ export default function Home() {
 
     return () => clearTimeout(delayDebounceFn);
   }, [selectedCategory, searchTerm]);
+
+  // Fetch all freelancers once to compute per-category counts
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL;
+        const response = await axios.get(`${backendUrl}/api/freelancers`);
+        const counts = {};
+        response.data.forEach((f) => {
+          (f.categories || []).forEach((c) => {
+            counts[c] = (counts[c] || 0) + 1;
+          });
+        });
+        setCategoryCounts(counts);
+      } catch (err) {
+        console.error("Error loading category counts", err);
+      }
+    };
+    fetchCounts();
+  }, []);
 
   // Handle Demand Submit
   const handleDemandSubmit = async (e) => {
@@ -368,6 +391,7 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredCategories.map((cat) => {
             const Icon = cat.icon;
+            const count = categoryCounts[cat.name] || 0;
             return (
               <button
                 key={cat.name}
@@ -375,9 +399,19 @@ export default function Home() {
                 data-testid={`featured-category-${cat.name.toLowerCase().replace(/[^a-z0-9]/g, "-")}`}
                 className="group text-left bg-[#1f1f1f] border border-[#465242] p-8 hover:border-[#E0DCD1] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4"
               >
-                <span className="w-12 h-12 rounded-full border border-[#465242] flex items-center justify-center text-[#E0DCD1] group-hover:bg-[#465242] transition-colors">
-                  <Icon className="w-5 h-5" />
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="w-12 h-12 rounded-full border border-[#465242] flex items-center justify-center text-[#E0DCD1] group-hover:bg-[#465242] transition-colors">
+                    <Icon className="w-5 h-5" />
+                  </span>
+                  {count >= 5 && (
+                    <span
+                      data-testid={`featured-category-count-${cat.name.toLowerCase().replace(/[^a-z0-9]/g, "-")}`}
+                      className="text-[10px] uppercase tracking-widest text-[#191919] bg-[#E0DCD1] font-bold px-2.5 py-1"
+                    >
+                      {count} profissionais
+                    </span>
+                  )}
+                </div>
                 <h3 className="font-bold text-[#E0DCD1] uppercase tracking-wider text-sm group-hover:text-white transition-colors">
                   {cat.name}
                 </h3>
