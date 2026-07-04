@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import axios from "axios";
 import { toast } from "sonner";
+import { NexoSymbol } from "./NexoSymbol";
 import { 
   User, 
   Briefcase, 
@@ -318,7 +319,7 @@ export default function Dashboard() {
       <header className="bg-[#1f1f1f] border-b border-[#465242] px-6 py-4 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link to="/" data-testid="dashboard-logo-link" className="flex items-center gap-3">
-            <span className="w-8 h-8 rounded-full border border-[#E0DCD1] flex items-center justify-center text-xs font-bold">N</span>
+            <NexoSymbol size={32} />
             <span className="font-light tracking-[0.25em] text-sm uppercase">NexoMoc</span>
           </Link>
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
+import { NexoSymbol } from "./NexoSymbol";
 import { toast } from "sonner";
 import { 
   Search, 
@@ -159,9 +160,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-[#191919]/90 backdrop-blur-md border-b border-[#465242] px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link to="/" data-testid="navbar-logo-link" className="flex items-center gap-3">
-            <span className="w-8 h-8 rounded-full border border-[#E0DCD1] flex items-center justify-center text-xs font-bold text-[#E0DCD1]">
-              N
-            </span>
+            <NexoSymbol size={32} />
             <span className="font-light tracking-[0.25em] text-sm uppercase">NexoMoc</span>
           </Link>
 
@@ -292,7 +291,7 @@ export default function Home() {
       <section className="relative min-h-[85vh] flex flex-col items-center justify-center text-center px-6 py-20 bg-cover bg-center" style={{ backgroundImage: `linear-gradient(rgba(25, 25, 25, 0.92), rgba(25, 25, 25, 0.95)), url("https://images.unsplash.com/photo-1650661926447-9efb2610f64c?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=80&w=1200")` }}>
         <div className="max-w-4xl mx-auto flex flex-col items-center">
           <div className="flex items-center gap-2 mb-8">
-            <span className="w-6 h-6 rounded-full border border-[#E0DCD1] flex items-center justify-center text-[10px] font-bold">N</span>
+            <NexoSymbol size={24} />
             <span className="text-xs uppercase tracking-[0.3em] font-light">NexoMoc Marketplace</span>
           </div>
 
@@ -724,9 +723,7 @@ export default function Home() {
       <footer className="border-t border-[#465242] bg-[#191919] py-12 px-6">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <span className="w-6 h-6 rounded-full border border-[#E0DCD1] flex items-center justify-center text-[10px] font-bold text-[#E0DCD1]">
-              N
-            </span>
+            <NexoSymbol size={24} />
             <span className="font-light tracking-[0.25em] text-xs uppercase text-[#E0DCD1]">NexoMoc</span>
           </div>
           <p className="text-xs text-muted-foreground tracking-wider font-light">

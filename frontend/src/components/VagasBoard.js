@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
+import { NexoSymbol } from "./NexoSymbol";
 import { 
   ArrowLeft, 
   Briefcase, 
@@ -75,9 +76,7 @@ export default function VagasBoard() {
       <header className="sticky top-0 z-50 bg-[#191919]/90 backdrop-blur-md border-b border-[#465242] px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link to="/" data-testid="vagas-nav-logo-link" className="flex items-center gap-3">
-            <span className="w-8 h-8 rounded-full border border-[#E0DCD1] flex items-center justify-center text-xs font-bold text-[#E0DCD1]">
-              N
-            </span>
+            <NexoSymbol size={32} />
             <span className="font-light tracking-[0.25em] text-sm uppercase">NexoMoc</span>
           </Link>
           <Link 
