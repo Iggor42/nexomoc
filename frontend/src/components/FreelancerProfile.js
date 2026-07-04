@@ -164,7 +164,7 @@ export default function FreelancerProfile() {
             </div>
 
             <div className="text-[10px] text-center text-muted-foreground font-light tracking-wide border-t border-[#465242]/40 pt-4">
-              Dica: O NexoMoc não cobra taxas! Toda a negociação e pagamento ocorrem diretamente entre você e o profissional.
+              Dica: Contato direto com o profissional. Toda a negociação e pagamento ocorrem diretamente entre você e o profissional.
             </div>
           </div>
 

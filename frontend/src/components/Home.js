@@ -8,9 +8,7 @@ import {
   Search, 
   MapPin, 
   Users, 
-  Briefcase, 
   Sparkles, 
-  UserCheck, 
   Send, 
   Star, 
   Phone, 
@@ -212,7 +210,7 @@ export default function Home() {
               }}
               className="hover:text-[#bebaa9] transition-colors flex items-center gap-1.5"
             >
-              <PlusCircle className="w-4 h-4" /> Anunciar Vaga (Grátis)
+              <PlusCircle className="w-4 h-4" /> Anunciar Vaga
             </a>
           </nav>
 
@@ -280,7 +278,7 @@ export default function Home() {
               }}
               className="hover:text-[#bebaa9] py-2 border-b border-[#465242]/20 flex items-center gap-1.5"
             >
-              <PlusCircle className="w-4 h-4" /> Anunciar Vaga (Grátis)
+              <PlusCircle className="w-4 h-4" /> Anunciar Vaga
             </a>
 
             <div className="pt-2">
@@ -323,7 +321,7 @@ export default function Home() {
           </h1>
 
           <p className="text-base sm:text-lg text-rgba(224, 220, 209, 0.75) font-light tracking-wide italic max-w-2xl mb-12">
-            Conectando quem precisa de soluções rápidas aos melhores profissionais autônomos locais. Rápido, sem burocracia e 100% gratuito.
+            Conectando quem precisa de soluções rápidas aos melhores profissionais autônomos locais. Rápido e sem burocracia.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center">
@@ -567,7 +565,7 @@ export default function Home() {
           <div className="text-center mb-16">
             <span className="text-xs uppercase tracking-[0.25em] text-muted-foreground block mb-3">Para quem precisa contratar</span>
             <h2 className="text-3xl font-light uppercase tracking-wide text-[#E0DCD1] mb-6">
-              Anuncie sua demanda gratuitamente
+              Anuncie sua demanda
             </h2>
             <p className="text-sm sm:text-base text-muted-foreground font-light max-w-2xl mx-auto">
               Precisa de um pintor, mecânico, designer ou encanador? Descreva o serviço de forma rápida. Sem precisar criar senhas ou contas complexas!
@@ -717,8 +715,8 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
           {/* For Clients */}
           <div className="bg-[#1f1f1f] border border-[#465242] p-8 text-left space-y-6">
-            <h3 className="text-lg font-bold text-[#E0DCD1] uppercase tracking-wide border-b border-[#465242] pb-3 flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-[#E0DCD1]" /> Para quem quer Contratar
+            <h3 className="text-lg font-bold text-[#E0DCD1] uppercase tracking-wide border-b border-[#465242] pb-3">
+              Para quem quer Contratar
             </h3>
             <ol className="space-y-4 text-sm font-light text-muted-foreground list-decimal pl-5">
               <li>
@@ -728,19 +726,19 @@ export default function Home() {
                 <strong className="text-[#E0DCD1]">Busque talentos locais:</strong> Se preferir, navegue diretamente pelo nosso diretório e filtre por qualificações e avaliações.
               </li>
               <li>
-                <strong className="text-[#E0DCD1]">Feche o negócio:</strong> Chame o freelancer no WhatsApp com apenas um clique e acerte os detalhes diretamente com ele. Sem taxas de intermediação!
+                <strong className="text-[#E0DCD1]">Feche o negócio:</strong> Chame o freelancer no WhatsApp com apenas um clique e acerte os detalhes diretamente com ele. Contato direto com o profissional.
               </li>
             </ol>
           </div>
 
           {/* For Freelancers */}
           <div className="bg-[#1f1f1f] border border-[#465242] p-8 text-left space-y-6">
-            <h3 className="text-lg font-bold text-[#E0DCD1] uppercase tracking-wide border-b border-[#465242] pb-3 flex items-center gap-2">
-              <UserCheck className="w-5 h-5 text-[#E0DCD1]" /> Para o Prestador / Freelancer
+            <h3 className="text-lg font-bold text-[#E0DCD1] uppercase tracking-wide border-b border-[#465242] pb-3">
+              Para o Prestador / Freelancer
             </h3>
             <ol className="space-y-4 text-sm font-light text-muted-foreground list-decimal pl-5">
               <li>
-                <strong className="text-[#E0DCD1]">Crie seu perfil grátis:</strong> Faça login com sua conta do Google e monte seu perfil de serviços e portfólio de forma intuitiva.
+                <strong className="text-[#E0DCD1]">Crie seu perfil:</strong> Faça login com sua conta do Google e monte seu perfil de serviços e portfólio de forma intuitiva.
               </li>
               <li>
                 <strong className="text-[#E0DCD1]">Veja oportunidades:</strong> Acesse o &quot;Painel de Vagas&quot; para ver o que os clientes de Montes Claros estão precisando em tempo real.
