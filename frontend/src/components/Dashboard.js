@@ -4,6 +4,7 @@ import { useAuth } from "./AuthContext";
 import axios from "axios";
 import { toast } from "sonner";
 import { NexoSymbol } from "./NexoSymbol";
+import { SEO } from "./SEO";
 import { 
   User, 
   Briefcase, 
@@ -314,7 +315,11 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-[#191919] text-[#E0DCD1] pb-20">
-      
+      <SEO
+        title="Painel do Profissional | NexoMoc"
+        description="Área privada do profissional NexoMoc. Gerencie perfil, serviços e portfólio."
+        path="/dashboard"
+      />
       {/* NAVBAR */}
       <header className="bg-[#1f1f1f] border-b border-[#465242] px-6 py-4 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between">

@@ -128,7 +128,34 @@ O arquivo `netlify.toml` já está incluído na raiz do repositório e cuida das
 
 ---
 
-## 8. Custos estimados (free tier)
+## 9. Ativar SEO após deploy
+
+Todo o SEO técnico já está no código (Open Graph, Twitter Cards, JSON-LD LocalBusiness/Person/WebSite, sitemap.xml, robots.txt e meta tags por página). Após o deploy, faça:
+
+1. **Substituir o domínio placeholder** — em 4 arquivos, troque `https://nexomoc.netlify.app` pelo seu domínio real:
+   - `frontend/public/index.html` (canonical, og:url, og:image, JSON-LD)
+   - `frontend/public/sitemap.xml`
+   - `frontend/public/robots.txt`
+   - `frontend/src/components/SEO.js` (constante `siteUrl`)
+
+2. **Criar imagem Open Graph** — salve como `frontend/public/og-image.png` (1200×630 px). Sugestão: logo NexoMoc sobre fundo preto/verde com "Serviços em Montes Claros, MG".
+
+3. **Google Search Console**
+   - Acesse [search.google.com/search-console](https://search.google.com/search-console)
+   - Adicione seu domínio → verifique via DNS ou meta tag
+   - Envie o sitemap: `https://SEU-DOMINIO/sitemap.xml`
+   - Solicite indexação da home e `/vagas`
+
+4. **Bing Webmaster Tools** (opcional) — [bing.com/webmasters](https://www.bing.com/webmasters)
+
+5. **Validadores** (rode após o deploy):
+   - [validator.schema.org](https://validator.schema.org/) — cole a URL para validar JSON-LD
+   - [developers.facebook.com/tools/debug](https://developers.facebook.com/tools/debug/) — inspeciona OG preview
+   - [cards-dev.twitter.com/validator](https://cards-dev.twitter.com/validator) — inspeciona Twitter card
+
+---
+
+## 10. Custos estimados (free tier)
 
 | Serviço          | Free tier                                              |
 |------------------|--------------------------------------------------------|

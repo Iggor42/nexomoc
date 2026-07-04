@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  NexoMoc — sitemap.xml
+  IMPORTANTE: após o deploy, substitua "https://nexomoc.netlify.app" por seu domínio final
+  (ex.: https://nexomoc.com.br). URLs de perfis individuais podem ser adicionadas dinamicamente
+  no futuro via geração de sitemap no backend.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://nexomoc.netlify.app/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://nexomoc.netlify.app/vagas</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://nexomoc.netlify.app/?categoria=Constru%C3%A7%C3%A3o%20e%20Reformas</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nexomoc.netlify.app/?categoria=Design%20e%20Tecnologia</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nexomoc.netlify.app/?categoria=Beleza%20e%20Bem-Estar</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nexomoc.netlify.app/?categoria=Educa%C3%A7%C3%A3o</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://nexomoc.netlify.app/?categoria=Servi%C3%A7os%20Dom%C3%A9sticos</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>

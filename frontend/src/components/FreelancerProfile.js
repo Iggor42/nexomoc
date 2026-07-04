@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { NexoSymbol } from "./NexoSymbol";
+import { SEO } from "./SEO";
 import { 
   ArrowLeft, 
   Star, 
@@ -78,6 +79,39 @@ export default function FreelancerProfile() {
 
   return (
     <div className="min-h-screen bg-[#191919] text-[#E0DCD1] pb-20">
+      <SEO
+        title={`${freelancer.name} — ${(freelancer.categories && freelancer.categories[0]) || "Profissional"} em Montes Claros`}
+        description={
+          (freelancer.bio && freelancer.bio.slice(0, 160)) ||
+          `Perfil profissional de ${freelancer.name} em Montes Claros, MG. Veja portfólio, serviços e entre em contato direto por WhatsApp.`
+        }
+        path={`/freelancer/${freelancer.user_id}`}
+        image={freelancer.picture || "https://nexomoc.netlify.app/og-image.png"}
+        type="profile"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Person",
+          "name": freelancer.name,
+          "description": freelancer.bio,
+          "image": freelancer.picture,
+          "jobTitle": (freelancer.categories && freelancer.categories[0]) || "Profissional Autônomo",
+          "worksFor": {
+            "@type": "Organization",
+            "name": "NexoMoc"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Montes Claros",
+            "addressRegion": "MG",
+            "addressCountry": "BR"
+          },
+          "aggregateRating": freelancer.review_count > 0 ? {
+            "@type": "AggregateRating",
+            "ratingValue": freelancer.rating,
+            "reviewCount": freelancer.review_count
+          } : undefined
+        }}
+      />
       {/* HEADER NAVBAR */}
       <header className="sticky top-0 z-50 bg-[#191919]/90 backdrop-blur-md border-b border-[#465242] px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">

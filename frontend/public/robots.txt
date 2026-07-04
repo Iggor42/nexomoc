@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /auth/
+
+# Após deploy, atualize a URL abaixo com o domínio real (Netlify ou custom)
+Sitemap: https://nexomoc.netlify.app/sitemap.xml

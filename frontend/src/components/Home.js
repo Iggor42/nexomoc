@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
 import { NexoSymbol } from "./NexoSymbol";
+import { SEO } from "./SEO";
 import { toast } from "sonner";
 import { 
   Search, 
@@ -177,6 +178,23 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#191919] text-[#E0DCD1]">
+      <SEO
+        title="NexoMoc — Serviços e Profissionais em Montes Claros, MG"
+        description="Marketplace local de Montes Claros. Encontre eletricistas, designers, manicures, professores e outros profissionais autônomos. Publique demandas grátis e feche direto por WhatsApp."
+        path="/"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "NexoMoc",
+          "url": "https://nexomoc.netlify.app/",
+          "inLanguage": "pt-BR",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://nexomoc.netlify.app/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }}
+      />
       {/* HEADER / NAVIGATION */}
       <header className="sticky top-0 z-50 bg-[#191919]/90 backdrop-blur-md border-b border-[#465242] px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">

@@ -1,27 +1,92 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#000000" />
-        <meta name="description" content="A product of emergent.sh" />
+        <meta name="theme-color" content="#191919" />
+
+        <!-- Primary SEO Meta Tags -->
+        <title>NexoMoc — Serviços e Profissionais em Montes Claros, MG</title>
+        <meta name="description" content="Encontre eletricistas, designers, manicures, professores e outros profissionais em Montes Claros. Publique demandas grátis e contrate com contato direto por WhatsApp." />
+        <meta name="keywords" content="serviços Montes Claros, freelancer Montes Claros, profissionais Montes Claros MG, eletricista Montes Claros, manicure Montes Claros, professor particular Montes Claros, marketplace Montes Claros, NexoMoc" />
+        <meta name="author" content="NexoMoc" />
+        <meta name="robots" content="index, follow" />
+        <meta name="geo.region" content="BR-MG" />
+        <meta name="geo.placename" content="Montes Claros" />
+        <meta name="geo.position" content="-16.7286;-43.8582" />
+        <meta name="ICBM" content="-16.7286, -43.8582" />
+
+        <!-- Canonical (atualize para o domínio real após deploy) -->
+        <link rel="canonical" href="https://nexomoc.netlify.app/" />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="NexoMoc" />
+        <meta property="og:locale" content="pt_BR" />
+        <meta property="og:url" content="https://nexomoc.netlify.app/" />
+        <meta property="og:title" content="NexoMoc — Serviços e Profissionais em Montes Claros, MG" />
+        <meta property="og:description" content="Conectando quem precisa a quem faz em Montes Claros. Publique sua demanda grátis ou cadastre-se como profissional e alcance novos clientes." />
+        <meta property="og:image" content="https://nexomoc.netlify.app/og-image.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="NexoMoc — Marketplace de serviços em Montes Claros" />
+
+        <!-- Twitter / X Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="NexoMoc — Serviços em Montes Claros, MG" />
+        <meta name="twitter:description" content="Conectando quem precisa a quem faz em Montes Claros. Publique sua demanda grátis ou cadastre-se como profissional." />
+        <meta name="twitter:image" content="https://nexomoc.netlify.app/og-image.png" />
+
+        <!-- Structured Data — LocalBusiness (Schema.org) -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "@id": "https://nexomoc.netlify.app/#organization",
+          "name": "NexoMoc",
+          "alternateName": "NexoMoc Montes Claros",
+          "description": "Marketplace local que conecta clientes a profissionais autônomos e freelancers em Montes Claros, MG. Categorias: construção, tecnologia, beleza, educação e serviços domésticos.",
+          "url": "https://nexomoc.netlify.app/",
+          "logo": "https://nexomoc.netlify.app/logo512.png",
+          "image": "https://nexomoc.netlify.app/og-image.png",
+          "inLanguage": "pt-BR",
+          "priceRange": "$$",
+          "areaServed": {
+            "@type": "City",
+            "name": "Montes Claros",
+            "containedInPlace": {
+              "@type": "State",
+              "name": "Minas Gerais"
+            }
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Montes Claros",
+            "addressRegion": "MG",
+            "addressCountry": "BR"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": -16.7286,
+            "longitude": -43.8582
+          },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Categorias de Serviços em Montes Claros",
+            "itemListElement": [
+              { "@type": "OfferCatalog", "name": "Construção e Reformas" },
+              { "@type": "OfferCatalog", "name": "Design e Tecnologia" },
+              { "@type": "OfferCatalog", "name": "Beleza e Bem-Estar" },
+              { "@type": "OfferCatalog", "name": "Educação" },
+              { "@type": "OfferCatalog", "name": "Serviços Domésticos" }
+            ]
+          }
+        }
+        </script>
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet" />
-        <!--
-        manifest.json provides metadata used when your web app is installed on a
-        user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-        -->
-        <!--
-        Notice the use of %PUBLIC_URL% in the tags above.
-        It will be replaced with the URL of the `public` folder during the build.
-        Only files inside the `public` folder can be referenced from the HTML.
-
-        Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-        work correctly both with client-side routing and a non-root public URL.
-        Learn how to configure a non-root public URL by running `npm run build`.
-        -->
-        <title>Emergent | Fullstack App</title>
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
         <script src="https://assets.emergent.sh/scripts/emergent-main.js"></script>
     </head>

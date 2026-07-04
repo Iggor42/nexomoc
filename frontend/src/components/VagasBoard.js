@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { NexoSymbol } from "./NexoSymbol";
+import { SEO } from "./SEO";
 import { 
   ArrowLeft, 
   Briefcase, 
@@ -72,6 +73,22 @@ export default function VagasBoard() {
 
   return (
     <div className="min-h-screen bg-[#191919] text-[#E0DCD1] pb-20">
+      <SEO
+        title="Vagas e Demandas de Clientes em Montes Claros | NexoMoc"
+        description="Confira as demandas mais recentes de clientes em Montes Claros — reformas, aulas, beleza, tecnologia e mais. Responda direto no WhatsApp e feche projetos hoje mesmo."
+        path="/vagas"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Vagas em Montes Claros",
+          "description": "Lista atualizada de demandas de clientes em Montes Claros, MG.",
+          "inLanguage": "pt-BR",
+          "about": {
+            "@type": "Place",
+            "name": "Montes Claros, MG"
+          }
+        }}
+      />
       {/* HEADER NAVBAR */}
       <header className="sticky top-0 z-50 bg-[#191919]/90 backdrop-blur-md border-b border-[#465242] px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">

@@ -56,6 +56,15 @@ Construir o "NexoMoc", um marketplace de serviços locais para Montes Claros, MG
 - Código já 100% env-driven (MONGO_URL, DB_NAME, CORS_ORIGINS, REACT_APP_BACKEND_URL) ✅
 - Emergent Google Auth confirmado como portável (usa window.location.origin, sem whitelist de domínio) ✅
 
+## SEO Básico (2026-02)
+- `index.html`: `lang="pt-BR"`, title/description otimizados para "Montes Claros", geo tags, canonical, Open Graph completo, Twitter Card, JSON-LD LocalBusiness (schema.org) ✅
+- `robots.txt`: permite indexação, protege `/dashboard` e `/auth/`, aponta para sitemap ✅
+- `sitemap.xml`: home, /vagas e URLs de categoria ✅
+- Componente `SEO.js` reutilizável usando metadata nativa do React 19 (sem lib extra) ✅
+- Meta tags dinâmicas por rota: Home (WebSite JSON-LD), VagasBoard (CollectionPage), FreelancerProfile (Person + AggregateRating), Dashboard ✅
+- Validado via Playwright: title/description/OG/Twitter/JSON-LD/canonical injetados corretamente em produção ✅
+- Instruções de pós-deploy no DEPLOYMENT.md: substituir domínio placeholder, criar og-image.png, Google Search Console ✅
+
 ## Backlog Priorizado
 - **P1**: Paginação, busca e filtros avançados nos boards de demandas e freelancers.
 - **P2**: Upload de imagens (foto de perfil e portfólio) via Object Storage.
