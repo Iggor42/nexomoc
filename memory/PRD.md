@@ -47,6 +47,15 @@ Construir o "NexoMoc", um marketplace de serviços locais para Montes Claros, MG
 - Contato direto via WhatsApp e e-mail ✅
 - Testado E2E e API (100% sucesso) ✅
 
+## Deployment Readiness (2026-02)
+- Guia completo `/app/DEPLOYMENT.md` (Netlify + Railway/Render + MongoDB Atlas) ✅
+- `netlify.toml` com SPA redirects e cache/security headers ✅
+- `backend/Procfile` + `backend/runtime.txt` (Python 3.11.9) para Railway/Render ✅
+- `render.yaml` blueprint pronto ✅
+- `.env.example` para frontend e backend ✅
+- Código já 100% env-driven (MONGO_URL, DB_NAME, CORS_ORIGINS, REACT_APP_BACKEND_URL) ✅
+- Emergent Google Auth confirmado como portável (usa window.location.origin, sem whitelist de domínio) ✅
+
 ## Backlog Priorizado
 - **P1**: Paginação, busca e filtros avançados nos boards de demandas e freelancers.
 - **P2**: Upload de imagens (foto de perfil e portfólio) via Object Storage.
