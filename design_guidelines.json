@@ -1,0 +1,72 @@
+{
+  "theme": "dark",
+  "archetype": "1 (Organic & Earthy)",
+  "colors": {
+    "background": "#191919",
+    "surface": "#242424",
+    "primary": "#E0DCD1",
+    "primary_foreground": "#191919",
+    "secondary": "#465242",
+    "secondary_foreground": "#E0DCD1",
+    "accent": "#465242",
+    "accent_foreground": "#E0DCD1",
+    "border": "#465242",
+    "text": "#E0DCD1",
+    "text_muted": "rgba(224, 220, 209, 0.7)"
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Manrope, sans-serif",
+      "weight": "300, 700",
+      "style": "uppercase, tracking-tight for section titles"
+    },
+    "body": {
+      "font_family": "Manrope, sans-serif",
+      "weight": "400",
+      "size": "text-base"
+    }
+  },
+  "spacing_and_layout": {
+    "philosophy": "Generous Spacing Philosophy. Use generous padding. Containers with borders must have internal padding (p-6 or p-8).",
+    "grid": "Base Grid: grid-cols-1 md:grid-cols-3 lg:grid-cols-4 for dashboards. Bento grid for marketing pages with gap-8 to gap-12.",
+    "alignment": "Mobile-First. Left-align text for better readability on dense content."
+  },
+  "components": {
+    "buttons": "Shadcn based. Primary: Bege bg (#E0DCD1), Preto text (#191919). Secondary: Transparent bg, Verde border (#465242), Bege text. Include data-testid.",
+    "cards": "Subtle borders with Verde (#465242), flat background (Preto #191919 or #242424), no heavy shadows. Sharp edges or max 8px border-radius.",
+    "navigation": "Sticky header with glassmorphism (bg-[#191919]/80 backdrop-blur-md) and Verde bottom border. Visible navigation links on desktop.",
+    "forms": "Shadcn components heavily customized. Bege text, Verde focus rings, Preto background for inputs."
+  },
+  "animations": {
+    "interactions": "Hover states on all interactive elements. Hover background/border colors should be a lighter hue. Focus states for accessibility.",
+    "page_load": "Fade in, translate Y for smooth scroll reveal. Staggered list animations."
+  },
+  "media": {
+    "hero_image": {
+      "url": "https://images.unsplash.com/photo-1650661926447-9efb2610f64c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTF8MHwxfHNlYXJjaHwyfHxmcmVlbGFuY2VyJTIwd29ya2luZyUyMGxhcHRvcCUyMGRhcmt8ZW58MHx8fHwxNzgzMTg4NTY3fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Dark aesthetic laptop desk setup for hero section overlay"
+    },
+    "service_craftsman": {
+      "url": "https://images.pexels.com/photos/26805219/pexels-photo-26805219.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Craftsman working on wood, representing manual labor services"
+    },
+    "service_laptop": {
+       "url": "https://images.unsplash.com/photo-1594398985750-3b54ec074a0a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTF8MHwxfHNlYXJjaHwzfHxmcmVlbGFuY2VyJTIwd29ya2luZyUyMGxhcHRvcCUyMGRhcmt8ZW58MHx8fHwxNzgzMTg4NTY3fDA&ixlib=rb-4.1.0&q=85",
+       "description": "Freelancer working on laptop, representing digital services"
+    }
+  },
+  "iconography": "lucide-react",
+  "accessibility": {
+    "contrast": "Ensure text over images has dark gradients. Minimum 4.5:1 contrast ratio. Use text shadow if needed.",
+    "testing": "All interactive elements MUST include data-testid attribute."
+  },
+  "instructions_to_main_agent": [
+    "Use pure HTML + Tailwind for marketing page layout structure. Use raw divs/sections for overlapping and asymmetry.",
+    "Use Shadcn components for interactive logic (Forms, Modals, Inputs) but customize classes to match the brand colors (Preto, Bege, Verde).",
+    "Implement Google Auth for Freelancers (Prestadores).",
+    "Clients (Contratantes) do NOT login. Build a simple service request form for them.",
+    "Build a Dashboard for the Freelancer to manage profile, portfolio, and view client demands (vagas).",
+    "Ensure all buttons and links have hover states and data-testid attributes.",
+    "Update tailwind.config.js and index.css to map the brand colors correctly (Preto: #191919, Bege: #E0DCD1, Verde: #465242)."
+  ]
+}
