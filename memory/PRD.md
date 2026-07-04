@@ -65,6 +65,24 @@ Construir o "NexoMoc", um marketplace de serviços locais para Montes Claros, MG
 - Validado via Playwright: title/description/OG/Twitter/JSON-LD/canonical injetados corretamente em produção ✅
 - Instruções de pós-deploy no DEPLOYMENT.md: substituir domínio placeholder, criar og-image.png, Google Search Console ✅
 
+## Landing Pages de Categoria (2026-02)
+- 8 landing pages SEO-friendly com URL amigável, cada uma com config em `frontend/src/data/categories.js`:
+  - `/eletricistas-em-montes-claros`
+  - `/designers-em-montes-claros`
+  - `/fotografos-em-montes-claros`
+  - `/reformas-em-montes-claros`
+  - `/marketing-montes-claros`
+  - `/beleza-montes-claros`
+  - `/servicos-domesticos-montes-claros`
+  - `/ti-tecnologia-montes-claros`
+- Componente único `CategoryPage.js` alimentado por config (título único, meta description única, JSON-LD CollectionPage + Service com OfferCatalog + BreadcrumbList, filtro de freelancers por categoria backend + termo de busca)
+- Rotas registradas dinamicamente em `App.js` via `CATEGORY_SLUGS.map(...)`
+- Home: cards de categoria em destaque linkam para landing pages dedicadas quando aplicável
+- Home: nova seção "Buscas populares" com 8 pill-links para todas as landing pages (internal linking SEO)
+- Cross-linking: cada CategoryPage lista as outras 7 no rodapé
+- Sitemap.xml atualizado com todas as 8 URLs (priority 0.85, changefreq weekly)
+- Validado via Playwright em todas as 8 rotas: title, canonical, og:url e h1 únicos por slug ✅
+
 ## Backlog Priorizado
 - **P1**: Paginação, busca e filtros avançados nos boards de demandas e freelancers.
 - **P2**: Upload de imagens (foto de perfil e portfólio) via Object Storage.

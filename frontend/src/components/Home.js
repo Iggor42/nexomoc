@@ -156,11 +156,11 @@ export default function Home() {
   };
 
   const featuredCategories = [
-    { name: "Construção e Reformas", icon: Hammer, desc: "Pedreiros, pintores, eletricistas e encanadores." },
-    { name: "Design e Tecnologia", icon: Laptop, desc: "Web designers, devs, social media e marketing." },
-    { name: "Beleza e Bem-Estar", icon: Scissors, desc: "Manicures, cabeleireiros, maquiadores e estética." },
-    { name: "Educação", icon: GraduationCap, desc: "Professores particulares, reforço e cursos." },
-    { name: "Serviços Domésticos", icon: Wrench, desc: "Diaristas, montadores, jardineiros e mais." }
+    { name: "Construção e Reformas", icon: Hammer, desc: "Pedreiros, pintores, eletricistas e encanadores.", slug: "reformas-em-montes-claros" },
+    { name: "Design e Tecnologia", icon: Laptop, desc: "Web designers, devs, social media e marketing.", slug: "designers-em-montes-claros" },
+    { name: "Beleza e Bem-Estar", icon: Scissors, desc: "Manicures, cabeleireiros, maquiadores e estética.", slug: "beleza-montes-claros" },
+    { name: "Educação", icon: GraduationCap, desc: "Professores particulares, reforço e cursos.", slug: null },
+    { name: "Serviços Domésticos", icon: Wrench, desc: "Diaristas, montadores, jardineiros e mais.", slug: "servicos-domesticos-montes-claros" }
   ];
 
   const handleCategorySelect = (categoryName) => {
@@ -408,13 +408,8 @@ export default function Home() {
           {featuredCategories.map((cat) => {
             const Icon = cat.icon;
             const count = categoryCounts[cat.name] || 0;
-            return (
-              <button
-                key={cat.name}
-                onClick={() => handleCategorySelect(cat.name)}
-                data-testid={`featured-category-${cat.name.toLowerCase().replace(/[^a-z0-9]/g, "-")}`}
-                className="group text-left bg-[#1f1f1f] border border-[#465242] p-8 hover:border-[#E0DCD1] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4"
-              >
+            const cardInner = (
+              <>
                 <div className="flex items-center justify-between">
                   <span className="w-12 h-12 rounded-full border border-[#465242] flex items-center justify-center text-[#E0DCD1] group-hover:bg-[#465242] transition-colors">
                     <Icon className="w-5 h-5" />
@@ -435,9 +430,52 @@ export default function Home() {
                 <span className="text-xs uppercase tracking-widest text-[#bebaa9] flex items-center gap-1.5 group-hover:gap-3 transition-all">
                   Ver profissionais <ArrowRight className="w-3.5 h-3.5" />
                 </span>
+              </>
+            );
+
+            const commonClass = "group text-left bg-[#1f1f1f] border border-[#465242] p-8 hover:border-[#E0DCD1] hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4";
+            const testId = `featured-category-${cat.name.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
+
+            return cat.slug ? (
+              <Link
+                key={cat.name}
+                to={`/${cat.slug}`}
+                data-testid={testId}
+                className={commonClass}
+              >
+                {cardInner}
+              </Link>
+            ) : (
+              <button
+                key={cat.name}
+                onClick={() => handleCategorySelect(cat.name)}
+                data-testid={testId}
+                className={commonClass}
+              >
+                {cardInner}
               </button>
             );
           })}
+        </div>
+      </section>
+
+      {/* POPULAR LOCAL SEARCHES — SEO internal linking */}
+      <section className="py-16 px-6 max-w-7xl mx-auto border-t border-[#465242]">
+        <div className="text-center mb-10">
+          <span className="text-xs uppercase tracking-[0.25em] text-muted-foreground block mb-3">Buscas populares</span>
+          <h2 className="text-2xl font-light uppercase tracking-wide text-[#E0DCD1]">
+            Serviços mais procurados em Montes Claros
+          </h2>
+        </div>
+        <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+          <Link to="/eletricistas-em-montes-claros" data-testid="popular-link-eletricistas" className="text-[11px] uppercase tracking-widest px-4 py-2 border border-[#465242] hover:border-[#E0DCD1] hover:text-white transition-all">Eletricistas</Link>
+          <Link to="/reformas-em-montes-claros" data-testid="popular-link-reformas" className="text-[11px] uppercase tracking-widest px-4 py-2 border border-[#465242] hover:border-[#E0DCD1] hover:text-white transition-all">Reformas e Construção</Link>
+          <Link to="/designers-em-montes-claros" data-testid="popular-link-designers" className="text-[11px] uppercase tracking-widest px-4 py-2 border border-[#465242] hover:border-[#E0DCD1] hover:text-white transition-all">Designers</Link>
+          <Link to="/fotografos-em-montes-claros" data-testid="popular-link-fotografos" className="text-[11px] uppercase tracking-widest px-4 py-2 border border-[#465242] hover:border-[#E0DCD1] hover:text-white transition-all">Fotógrafos</Link>
+          <Link to="/marketing-montes-claros" data-testid="popular-link-marketing" className="text-[11px] uppercase tracking-widest px-4 py-2 border border-[#465242] hover:border-[#E0DCD1] hover:text-white transition-all">Marketing e Redes Sociais</Link>
+          <Link to="/beleza-montes-claros" data-testid="popular-link-beleza" className="text-[11px] uppercase tracking-widest px-4 py-2 border border-[#465242] hover:border-[#E0DCD1] hover:text-white transition-all">Beleza e Estética</Link>
+          <Link to="/servicos-domesticos-montes-claros" data-testid="popular-link-domesticos" className="text-[11px] uppercase tracking-widest px-4 py-2 border border-[#465242] hover:border-[#E0DCD1] hover:text-white transition-all">Serviços Domésticos</Link>
+          <Link to="/ti-tecnologia-montes-claros" data-testid="popular-link-ti" className="text-[11px] uppercase tracking-widest px-4 py-2 border border-[#465242] hover:border-[#E0DCD1] hover:text-white transition-all">TI e Tecnologia</Link>
         </div>
       </section>
 
