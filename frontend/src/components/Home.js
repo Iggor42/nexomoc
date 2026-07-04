@@ -335,7 +335,7 @@ export default function Home() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight text-[#E0DCD1] leading-tight uppercase mb-6 max-w-3xl">
-            O seu marketplace de serviços de Montes Claros
+            O seu marketplace de serviços em Montes Claros
           </h1>
 
           <p className="text-base sm:text-lg text-rgba(224, 220, 209, 0.75) font-light tracking-wide italic max-w-2xl mb-12">
