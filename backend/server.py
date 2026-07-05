@@ -573,6 +573,49 @@ async def seed_data():
         logger.info("Successfully seeded database demands.")
 
 
+# --- NOVOS ENDPOINTS: FORMULÁRIOS DE CADASTRO ---
+
+class FreelancerRegistration(BaseModel):
+    full_name: str
+    professional_name: str
+    category: str
+    service_description: str
+    city_neighborhood: str
+    remote: str
+    whatsapp: str
+    instagram: Optional[str] = ""
+    portfolio_link: Optional[str] = ""
+
+class ClientDemandForm(BaseModel):
+    name: str
+    company: Optional[str] = ""
+    service_type: str
+    demand_description: str
+    deadline: Optional[str] = ""
+    work_format: str
+    whatsapp: str
+    allow_publish: str
+
+@api_router.post("/freelancer-registration", status_code=201)
+async def register_freelancer(data: FreelancerRegistration):
+    doc = data.dict()
+    doc["registration_id"] = f"reg_{uuid.uuid4().hex[:12]}"
+    doc["status"] = "pending"
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    await db.freelancer_registrations.insert_one(doc)
+    logger.info(f"Nova inscrição de freelancer: {data.professional_name} — {data.category}")
+    return {"message": "Cadastro recebido com sucesso.", "id": doc["registration_id"]}
+
+@api_router.post("/client-demand", status_code=201)
+async def submit_client_demand(data: ClientDemandForm):
+    doc = data.dict()
+    doc["demand_id"] = f"dem_{uuid.uuid4().hex[:12]}"
+    doc["status"] = "pending"
+    doc["created_at"] = datetime.now(timezone.utc).isoformat()
+    await db.client_demands.insert_one(doc)
+    logger.info(f"Nova demanda de cliente: {data.name} — {data.service_type}")
+    return {"message": "Demanda recebida com sucesso.", "id": doc["demand_id"]}
+
 # Include the API router
 app.include_router(api_router)
 
