@@ -169,11 +169,7 @@ export default function Home() {
   };
 
   const handleHeroProvideServiceClick = () => {
-    if (user) {
-      navigate("/dashboard");
-    } else {
-      loginWithGoogle();
-    }
+    navigate("/cadastrar-servico");
   };
 
   return (
@@ -243,13 +239,13 @@ export default function Home() {
                 Painel do Prestador
               </Link>
             ) : (
-              <button 
-                onClick={loginWithGoogle}
+              <Link
+                to="/cadastrar-servico"
                 data-testid="navbar-login-btn"
                 className="px-5 py-2 bg-[#E0DCD1] text-[#191919] text-xs uppercase tracking-wider font-bold border border-[#E0DCD1] hover:bg-transparent hover:text-[#E0DCD1] transition-all"
               >
-                Entrar como Prestador
-              </button>
+                Cadastrar serviço
+              </Link>
             )}
           </div>
 
@@ -310,16 +306,14 @@ export default function Home() {
                   Painel do Prestador
                 </Link>
               ) : (
-                <button 
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    loginWithGoogle();
-                  }}
+                <Link
+                  to="/cadastrar-servico"
+                  onClick={() => setIsMobileMenuOpen(false)}
                   data-testid="mobile-navbar-login-btn"
                   className="w-full text-center px-5 py-2.5 bg-[#E0DCD1] text-[#191919] text-xs uppercase tracking-wider font-bold border border-[#E0DCD1] hover:bg-transparent hover:text-[#E0DCD1] transition-all"
                 >
-                  Entrar como Prestador
-                </button>
+                  Cadastrar serviço
+                </Link>
               )}
             </div>
           </div>
