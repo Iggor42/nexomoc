@@ -7,6 +7,7 @@ import logging
 import uuid
 import requests
 import smtplib
+import threading
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timezone, timedelta
@@ -31,7 +32,7 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # --- EMAIL NOTIFICATION ---
-def send_email_notification(subject: str, body: str):
+def _send_email_worker(subject: str, body: str):
     try:
         smtp_user = os.environ.get('SMTP_USER', '')
         smtp_pass = os.environ.get('SMTP_PASS', '')
@@ -47,12 +48,16 @@ def send_email_notification(subject: str, body: str):
         msg["To"] = notify_email
         msg.attach(MIMEText(body, "html"))
 
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=10) as server:
             server.login(smtp_user, smtp_pass)
             server.sendmail(smtp_user, notify_email, msg.as_string())
         logger.info(f"E-mail enviado: {subject}")
     except Exception as e:
         logger.error(f"Erro ao enviar e-mail: {e}")
+
+def send_email_notification(subject: str, body: str):
+    t = threading.Thread(target=_send_email_worker, args=(subject, body), daemon=True)
+    t.start()
 
 # Create FastAPI instance
 app = FastAPI(title="NexoMoc API")
