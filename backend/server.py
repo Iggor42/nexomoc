@@ -6,6 +6,9 @@ import os
 import logging
 import uuid
 import requests
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
@@ -26,6 +29,30 @@ logger = logging.getLogger(__name__)
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
+
+# --- EMAIL NOTIFICATION ---
+def send_email_notification(subject: str, body: str):
+    try:
+        smtp_user = os.environ.get('SMTP_USER', '')
+        smtp_pass = os.environ.get('SMTP_PASS', '')
+        notify_email = os.environ.get('NOTIFY_EMAIL', smtp_user)
+
+        if not smtp_user or not smtp_pass:
+            logger.warning("SMTP não configurado — notificação por e-mail ignorada.")
+            return
+
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = subject
+        msg["From"] = smtp_user
+        msg["To"] = notify_email
+        msg.attach(MIMEText(body, "html"))
+
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(smtp_user, smtp_pass)
+            server.sendmail(smtp_user, notify_email, msg.as_string())
+        logger.info(f"E-mail enviado: {subject}")
+    except Exception as e:
+        logger.error(f"Erro ao enviar e-mail: {e}")
 
 # Create FastAPI instance
 app = FastAPI(title="NexoMoc API")
@@ -604,6 +631,23 @@ async def register_freelancer(data: FreelancerRegistration):
     doc["created_at"] = datetime.now(timezone.utc).isoformat()
     await db.freelancer_registrations.insert_one(doc)
     logger.info(f"Nova inscrição de freelancer: {data.professional_name} — {data.category}")
+
+    body = f"""
+    <h2 style="color:#465242">Novo Cadastro de Prestador — NexoMoc</h2>
+    <table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;width:100%">
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Nome completo</b></td><td style="padding:8px;border:1px solid #ddd">{data.full_name}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Nome profissional</b></td><td style="padding:8px;border:1px solid #ddd">{data.professional_name}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Categoria</b></td><td style="padding:8px;border:1px solid #ddd">{data.category}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Descrição</b></td><td style="padding:8px;border:1px solid #ddd">{data.service_description}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Cidade/Bairro</b></td><td style="padding:8px;border:1px solid #ddd">{data.city_neighborhood}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Atende remoto</b></td><td style="padding:8px;border:1px solid #ddd">{data.remote}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>WhatsApp</b></td><td style="padding:8px;border:1px solid #ddd">{data.whatsapp}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Instagram</b></td><td style="padding:8px;border:1px solid #ddd">{data.instagram or '—'}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Portfólio</b></td><td style="padding:8px;border:1px solid #ddd">{data.portfolio_link or '—'}</td></tr>
+    </table>
+    """
+    send_email_notification(f"[NexoMoc] Novo prestador: {data.professional_name}", body)
+
     return {"message": "Cadastro recebido com sucesso.", "id": doc["registration_id"]}
 
 @api_router.post("/client-demand", status_code=201)
@@ -614,6 +658,22 @@ async def submit_client_demand(data: ClientDemandForm):
     doc["created_at"] = datetime.now(timezone.utc).isoformat()
     await db.client_demands.insert_one(doc)
     logger.info(f"Nova demanda de cliente: {data.name} — {data.service_type}")
+
+    body = f"""
+    <h2 style="color:#465242">Nova Demanda de Contratante — NexoMoc</h2>
+    <table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;width:100%">
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Nome</b></td><td style="padding:8px;border:1px solid #ddd">{data.name}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Empresa</b></td><td style="padding:8px;border:1px solid #ddd">{data.company or '—'}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Tipo de serviço</b></td><td style="padding:8px;border:1px solid #ddd">{data.service_type}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Descrição</b></td><td style="padding:8px;border:1px solid #ddd">{data.demand_description}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Prazo</b></td><td style="padding:8px;border:1px solid #ddd">{data.deadline or '—'}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Formato</b></td><td style="padding:8px;border:1px solid #ddd">{data.work_format}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>WhatsApp</b></td><td style="padding:8px;border:1px solid #ddd">{data.whatsapp}</td></tr>
+      <tr><td style="padding:8px;border:1px solid #ddd"><b>Autoriza publicar</b></td><td style="padding:8px;border:1px solid #ddd">{data.allow_publish}</td></tr>
+    </table>
+    """
+    send_email_notification(f"[NexoMoc] Nova demanda: {data.service_type} — {data.name}", body)
+
     return {"message": "Demanda recebida com sucesso.", "id": doc["demand_id"]}
 
 # Include the API router
