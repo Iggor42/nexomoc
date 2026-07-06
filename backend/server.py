@@ -677,6 +677,18 @@ async def register_freelancer(data: FreelancerRegistration):
 
     return {"message": "Cadastro recebido com sucesso.", "id": doc["registration_id"]}
 
+@api_router.get("/admin/registrations")
+async def list_registrations():
+    """Lista todos os cadastros de prestadores recebidos."""
+    docs = await db.freelancer_registrations.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return docs
+
+@api_router.get("/admin/demands")
+async def list_all_demands():
+    """Lista todas as demandas de contratantes recebidas."""
+    docs = await db.client_demands.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return docs
+
 @api_router.post("/client-demand", status_code=201)
 async def submit_client_demand(data: ClientDemandForm):
     doc = data.dict()
