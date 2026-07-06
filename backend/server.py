@@ -1,5 +1,6 @@
-from fastapi import FastAPI, APIRouter, Cookie, Header, Depends, HTTPException, Response, status
+from fastapi import FastAPI, APIRouter, Cookie, Header, Depends, HTTPException, Response, status, UploadFile, File, Form
 from fastapi.responses import HTMLResponse
+import base64 as b64lib
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -812,6 +813,33 @@ async def reject_registration(registration_id: str, password: str = ""):
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Cadastro não encontrado.")
     return {"message": "Cadastro rejeitado."}
+
+# ── ADMIN: upload de foto do prestador ───────────────────────────────────────
+@api_router.post("/admin/freelancer/{user_id}/photo")
+async def upload_freelancer_photo(
+    user_id: str,
+    password: str = Form(...),
+    file: UploadFile = File(...)
+):
+    check_admin(password)
+    # Validar tipo
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="Apenas imagens são permitidas.")
+    # Limitar tamanho a 2MB
+    contents = await file.read()
+    if len(contents) > 2 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Imagem muito grande. Máximo 2MB.")
+    # Converter para base64 data URL
+    b64 = b64lib.b64encode(contents).decode("utf-8")
+    data_url = f"data:{file.content_type};base64,{b64}"
+    result = await db.users.update_one(
+        {"user_id": user_id},
+        {"$set": {"picture": data_url}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Prestador não encontrado.")
+    logger.info(f"Foto atualizada para user_id={user_id}")
+    return {"message": "Foto atualizada com sucesso.", "picture": data_url}
 
 
 @api_router.post("/client-demand", status_code=201)
