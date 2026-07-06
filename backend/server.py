@@ -36,31 +36,27 @@ db = client[os.environ['DB_NAME']]
 # --- EMAIL NOTIFICATION ---
 def _send_email_worker(subject: str, body: str):
     try:
-        resend_key = os.environ.get('RESEND_API_KEY', '')
+        smtp_user = os.environ.get('SMTP_USER', '')
+        smtp_pass = os.environ.get('SMTP_PASS', '')
         notify_email = os.environ.get('NOTIFY_EMAIL', 'contato.nexomoc@gmail.com')
 
-        if not resend_key:
-            logger.warning("RESEND_API_KEY não configurado — notificação ignorada.")
+        if not smtp_user or not smtp_pass:
+            logger.warning("SMTP não configurado — notificação ignorada.")
             return
 
-        payload = json_lib.dumps({
-            "from": "NexoMoc <onboarding@resend.dev>",
-            "to": [notify_email],
-            "subject": subject,
-            "html": body
-        }).encode()
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = subject
+        msg["From"] = smtp_user
+        msg["To"] = notify_email
+        msg.attach(MIMEText(body, "html"))
 
-        req = urllib.request.Request(
-            "https://api.resend.com/emails",
-            data=payload,
-            headers={
-                "Authorization": f"Bearer {resend_key}",
-                "Content-Type": "application/json"
-            },
-            method="POST"
-        )
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            logger.info(f"E-mail enviado via Resend: {subject} — status {resp.status}")
+        with smtplib.SMTP("smtp-relay.brevo.com", 587, timeout=15) as server:
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            server.login(smtp_user, smtp_pass)
+            server.sendmail(smtp_user, notify_email, msg.as_string())
+        logger.info(f"E-mail enviado via Brevo: {subject}")
     except Exception as e:
         logger.error(f"Erro ao enviar e-mail: {e}")
 
