@@ -1,4 +1,5 @@
 from fastapi import FastAPI, APIRouter, Cookie, Header, Depends, HTTPException, Response, status
+from fastapi.responses import HTMLResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -653,35 +654,91 @@ class ClientDemandForm(BaseModel):
 @api_router.post("/freelancer-registration", status_code=201)
 async def register_freelancer(data: FreelancerRegistration):
     doc = data.dict()
-    doc["registration_id"] = f"reg_{uuid.uuid4().hex[:12]}"
+    reg_id = f"reg_{uuid.uuid4().hex[:12]}"
+    doc["registration_id"] = reg_id
     doc["status"] = "pending"
     doc["created_at"] = datetime.now(timezone.utc).isoformat()
     await db.freelancer_registrations.insert_one(doc)
     logger.info(f"Nova inscrição de freelancer: {data.professional_name} — {data.category}")
 
-    body = f"""
-    <h2 style="color:#465242">Novo Cadastro de Prestador — NexoMoc</h2>
-    <table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;width:100%">
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Nome completo</b></td><td style="padding:8px;border:1px solid #ddd">{data.full_name}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Nome profissional</b></td><td style="padding:8px;border:1px solid #ddd">{data.professional_name}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Categoria</b></td><td style="padding:8px;border:1px solid #ddd">{data.category}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Descrição</b></td><td style="padding:8px;border:1px solid #ddd">{data.service_description}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Cidade/Bairro</b></td><td style="padding:8px;border:1px solid #ddd">{data.city_neighborhood}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Atende remoto</b></td><td style="padding:8px;border:1px solid #ddd">{data.remote}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>WhatsApp</b></td><td style="padding:8px;border:1px solid #ddd">{data.whatsapp}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Instagram</b></td><td style="padding:8px;border:1px solid #ddd">{data.instagram or '—'}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Portfólio</b></td><td style="padding:8px;border:1px solid #ddd">{data.portfolio_link or '—'}</td></tr>
-    </table>
-    """
+    backend_url = os.environ.get("BACKEND_URL", "https://nexomoc-backend-production-669d.up.railway.app")
+    approve_url = f"{backend_url}/api/admin/approve/{reg_id}"
+
+    body = (
+        "<div style='font-family:sans-serif;max-width:600px;margin:0 auto'>"
+        "<h2 style='color:#465242'>Novo Cadastro de Prestador — NexoMoc</h2>"
+        "<table style='font-size:14px;border-collapse:collapse;width:100%'>"
+        f"<tr><td style='padding:8px;border:1px solid #ddd;background:#f5f5f5;width:40%'><b>Nome completo</b></td><td style='padding:8px;border:1px solid #ddd'>{data.full_name}</td></tr>"
+        f"<tr><td style='padding:8px;border:1px solid #ddd;background:#f5f5f5'><b>Nome profissional</b></td><td style='padding:8px;border:1px solid #ddd'>{data.professional_name}</td></tr>"
+        f"<tr><td style='padding:8px;border:1px solid #ddd;background:#f5f5f5'><b>Categoria</b></td><td style='padding:8px;border:1px solid #ddd'>{data.category}</td></tr>"
+        f"<tr><td style='padding:8px;border:1px solid #ddd;background:#f5f5f5'><b>Descrição do serviço</b></td><td style='padding:8px;border:1px solid #ddd'>{data.service_description}</td></tr>"
+        f"<tr><td style='padding:8px;border:1px solid #ddd;background:#f5f5f5'><b>Cidade/Bairro</b></td><td style='padding:8px;border:1px solid #ddd'>{data.city_neighborhood}</td></tr>"
+        f"<tr><td style='padding:8px;border:1px solid #ddd;background:#f5f5f5'><b>Atende remoto</b></td><td style='padding:8px;border:1px solid #ddd'>{data.remote}</td></tr>"
+        f"<tr><td style='padding:8px;border:1px solid #ddd;background:#f5f5f5'><b>WhatsApp</b></td><td style='padding:8px;border:1px solid #ddd'>{data.whatsapp}</td></tr>"
+        f"<tr><td style='padding:8px;border:1px solid #ddd;background:#f5f5f5'><b>Instagram</b></td><td style='padding:8px;border:1px solid #ddd'>{data.instagram or '—'}</td></tr>"
+        f"<tr><td style='padding:8px;border:1px solid #ddd;background:#f5f5f5'><b>Portfólio</b></td><td style='padding:8px;border:1px solid #ddd'>{data.portfolio_link or '—'}</td></tr>"
+        "</table>"
+        "<div style='margin-top:24px;text-align:center'>"
+        f"<a href='{approve_url}' style='background:#465242;color:#E0DCD1;padding:14px 32px;text-decoration:none;border-radius:6px;font-size:16px;font-weight:bold;display:inline-block'>✅ Aprovar e publicar no site</a>"
+        "</div>"
+        "<p style='color:#888;font-size:12px;margin-top:16px;text-align:center'>NexoMoc — Conectando quem precisa a quem faz.</p>"
+        "</div>"
+    )
     send_email_notification(f"[NexoMoc] Novo prestador: {data.professional_name}", body)
 
-    return {"message": "Cadastro recebido com sucesso.", "id": doc["registration_id"]}
+    return {"message": "Cadastro recebido com sucesso.", "id": reg_id}
 
 @api_router.get("/admin/registrations")
 async def list_registrations():
     """Lista todos os cadastros de prestadores recebidos."""
     docs = await db.freelancer_registrations.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
     return docs
+
+@api_router.get("/admin/approve/{registration_id}")
+async def approve_registration(registration_id: str):
+    """Aprova um cadastro pendente e publica o prestador no site."""
+    reg = await db.freelancer_registrations.find_one({"registration_id": registration_id}, {"_id": 0})
+    if not reg:
+        return HTMLResponse("<h2>Cadastro não encontrado.</h2>", status_code=404)
+    if reg.get("status") == "approved":
+        return HTMLResponse("<h2>✅ Este prestador já foi aprovado anteriormente.</h2>")
+
+    # Montar documento para a coleção users (listagem pública)
+    user_id = f"user_{uuid.uuid4().hex[:10]}"
+    user_doc = {
+        "user_id": user_id,
+        "email": "",
+        "name": reg.get("professional_name") or reg.get("full_name"),
+        "picture": "",
+        "phone": reg.get("whatsapp", ""),
+        "bio": reg.get("service_description", ""),
+        "categories": [reg.get("category", "Outros")],
+        "services": [],
+        "portfolio": [],
+        "instagram": reg.get("instagram", ""),
+        "portfolio_link": reg.get("portfolio_link", ""),
+        "city_neighborhood": reg.get("city_neighborhood", ""),
+        "remote": reg.get("remote", ""),
+        "full_name": reg.get("full_name", ""),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "approved_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.users.insert_one(user_doc)
+    await db.freelancer_registrations.update_one(
+        {"registration_id": registration_id},
+        {"$set": {"status": "approved", "user_id": user_id}}
+    )
+    logger.info(f"Prestador aprovado: {user_doc['name']} ({registration_id})")
+
+    html = (
+        "<div style='font-family:sans-serif;max-width:500px;margin:60px auto;text-align:center'>"
+        "<h1 style='color:#465242'>✅ Aprovado!</h1>"
+        f"<p style='font-size:18px'><b>{user_doc['name']}</b> agora está publicado no NexoMoc.</p>"
+        "<p style='color:#888'>Você pode fechar esta aba.</p>"
+        "<a href='https://nexomoc.netlify.app' style='color:#465242'>Ver no site →</a>"
+        "</div>"
+    )
+    return HTMLResponse(html)
 
 @api_router.get("/admin/demands")
 async def list_all_demands():
