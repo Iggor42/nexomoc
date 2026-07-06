@@ -10,6 +10,7 @@ import VagasBoard from "./components/VagasBoard";
 import CategoryPage from "./components/CategoryPage";
 import { CATEGORY_SLUGS } from "./data/categories";
 import { Toaster } from "sonner";
+import AdminPanel from "./components/AdminPanel";
 import "@/App.css";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             {CATEGORY_SLUGS.map((slug) => (
               <Route key={slug} path={`/${slug}`} element={<CategoryPage slug={slug} />} />
             ))}
+            <Route path="/admin" element={<AdminPanel />} />
             <Route path="*" element={<Home />} />
           </Routes>
           <Toaster
