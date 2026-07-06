@@ -37,6 +37,13 @@ db = client[os.environ['DB_NAME']]
 # --- EMAIL NOTIFICATION ---
 APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRTppsDH3Km6-jXM_-YRVivOXuWMM70khlDHV-BSoNnMACyF42oP8giEAjc_AlUFk2Ag/exec"
 
+# --- ADMIN ---
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "nexomoc2024")
+
+def check_admin(password: str = ""):
+    if password != ADMIN_PASSWORD:
+        raise HTTPException(status_code=401, detail="Senha incorreta.")
+
 def _send_email_worker(subject: str, body: str):
     try:
         payload = json_lib.dumps({
@@ -753,6 +760,59 @@ async def cleanup_test_registrations(keep: str = ""):
     query = {"registration_id": {"$nin": keep_ids}} if keep_ids else {}
     result = await db.freelancer_registrations.delete_many(query)
     return {"deleted": result.deleted_count, "kept": keep_ids}
+
+# ── ADMIN: listar prestadores publicados ──────────────────────────────────────
+@api_router.get("/admin/published")
+async def list_published(password: str = ""):
+    check_admin(password)
+    docs = await db.users.find({}, {"_id": 0}).sort("approved_at", -1).to_list(1000)
+    return docs
+
+# ── ADMIN: editar prestador publicado ────────────────────────────────────────
+class AdminEditFreelancer(BaseModel):
+    password: str
+    name: Optional[str] = None
+    bio: Optional[str] = None
+    phone: Optional[str] = None
+    instagram: Optional[str] = None
+    portfolio_link: Optional[str] = None
+    city_neighborhood: Optional[str] = None
+    remote: Optional[str] = None
+    picture: Optional[str] = None
+    categories: Optional[List[str]] = None
+
+@api_router.patch("/admin/freelancer/{user_id}")
+async def edit_freelancer(user_id: str, data: AdminEditFreelancer):
+    check_admin(data.password)
+    update = {k: v for k, v in data.dict().items() if k != "password" and v is not None}
+    if not update:
+        raise HTTPException(status_code=400, detail="Nenhum campo para atualizar.")
+    result = await db.users.update_one({"user_id": user_id}, {"$set": update})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Prestador não encontrado.")
+    return {"message": "Atualizado com sucesso."}
+
+# ── ADMIN: excluir prestador publicado ───────────────────────────────────────
+@api_router.delete("/admin/freelancer/{user_id}")
+async def delete_freelancer(user_id: str, password: str = ""):
+    check_admin(password)
+    result = await db.users.delete_one({"user_id": user_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Prestador não encontrado.")
+    return {"message": "Prestador removido do site."}
+
+# ── ADMIN: rejeitar cadastro pendente ────────────────────────────────────────
+@api_router.post("/admin/reject/{registration_id}")
+async def reject_registration(registration_id: str, password: str = ""):
+    check_admin(password)
+    result = await db.freelancer_registrations.update_one(
+        {"registration_id": registration_id},
+        {"$set": {"status": "rejected"}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Cadastro não encontrado.")
+    return {"message": "Cadastro rejeitado."}
+
 
 @api_router.post("/client-demand", status_code=201)
 async def submit_client_demand(data: ClientDemandForm):
