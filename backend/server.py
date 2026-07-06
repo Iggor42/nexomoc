@@ -34,34 +34,26 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # --- EMAIL NOTIFICATION ---
+APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRTppsDH3Km6-jXM_-YRVivOXuWMM70khlDHV-BSoNnMACyF42oP8giEAjc_AlUFk2Ag/exec"
+
 def _send_email_worker(subject: str, body: str):
     try:
-        resend_key = os.environ.get('RESEND_API_KEY', '')
-        notify_email = os.environ.get('NOTIFY_EMAIL', 'iggormorais42@gmail.com')
-
-        if not resend_key:
-            logger.warning("RESEND_API_KEY não configurado — notificação ignorada.")
-            return
-
         payload = json_lib.dumps({
-            "from": "NexoMoc <onboarding@resend.dev>",
-            "to": [notify_email],
             "subject": subject,
-            "html": body
+            "body": body
         }).encode("utf-8")
 
         req = urllib.request.Request(
-            "https://api.resend.com/emails",
+            APPS_SCRIPT_URL,
             data=payload,
-            headers={
-                "Authorization": f"Bearer {resend_key}",
-                "Content-Type": "application/json"
-            },
+            headers={"Content-Type": "application/json"},
             method="POST"
         )
-        with urllib.request.urlopen(req, timeout=15) as resp:
+        # Apps Script redireciona — seguir redirect manualmente
+        opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler())
+        with opener.open(req, timeout=20) as resp:
             result = resp.read().decode()
-            logger.info(f"E-mail enviado via Resend: {subject} — {result}")
+            logger.info(f"E-mail enviado via Apps Script: {subject} — {result}")
     except Exception as e:
         logger.error(f"Erro ao enviar e-mail: {e}")
 
@@ -173,28 +165,22 @@ async def root():
 
 @api_router.get("/test-email")
 async def test_email():
-    """Endpoint de diagnóstico para testar envio de e-mail."""
-    import urllib.request, json as json_lib
-    resend_key = os.environ.get('RESEND_API_KEY', '')
-    notify_email = os.environ.get('NOTIFY_EMAIL', 'iggormorais42@gmail.com')
-    if not resend_key:
-        return {"status": "erro", "detalhe": "RESEND_API_KEY não configurado"}
+    """Endpoint de diagnóstico para testar envio de e-mail via Apps Script."""
     try:
         payload = json_lib.dumps({
-            "from": "NexoMoc <onboarding@resend.dev>",
-            "to": [notify_email],
             "subject": "[NexoMoc] Teste diagnóstico",
-            "html": "<h2>Teste direto do Railway</h2>"
+            "body": "<h2>Teste direto do Railway via Apps Script</h2>"
         }).encode("utf-8")
         req = urllib.request.Request(
-            "https://api.resend.com/emails",
+            APPS_SCRIPT_URL,
             data=payload,
-            headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
+            headers={"Content-Type": "application/json"},
             method="POST"
         )
-        with urllib.request.urlopen(req, timeout=15) as resp:
+        opener = urllib.request.build_opener(urllib.request.HTTPRedirectHandler())
+        with opener.open(req, timeout=20) as resp:
             result = resp.read().decode()
-            return {"status": "enviado", "resposta": result, "para": notify_email}
+            return {"status": "enviado", "resposta": result}
     except Exception as e:
         return {"status": "erro", "detalhe": str(e)}
 
