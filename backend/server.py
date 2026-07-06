@@ -48,7 +48,10 @@ def _send_email_worker(subject: str, body: str):
         msg["To"] = notify_email
         msg.attach(MIMEText(body, "html"))
 
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=10) as server:
+        with smtplib.SMTP("smtp.gmail.com", 587, timeout=10) as server:
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
             server.login(smtp_user, smtp_pass)
             server.sendmail(smtp_user, notify_email, msg.as_string())
         logger.info(f"E-mail enviado: {subject}")
