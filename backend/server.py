@@ -8,6 +8,8 @@ import uuid
 import requests
 import smtplib
 import threading
+import urllib.request
+import json as json_lib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timezone, timedelta
@@ -34,27 +36,31 @@ db = client[os.environ['DB_NAME']]
 # --- EMAIL NOTIFICATION ---
 def _send_email_worker(subject: str, body: str):
     try:
-        smtp_user = os.environ.get('SMTP_USER', '')
-        smtp_pass = os.environ.get('SMTP_PASS', '')
-        notify_email = os.environ.get('NOTIFY_EMAIL', smtp_user)
+        resend_key = os.environ.get('RESEND_API_KEY', '')
+        notify_email = os.environ.get('NOTIFY_EMAIL', 'contato.nexomoc@gmail.com')
 
-        if not smtp_user or not smtp_pass:
-            logger.warning("SMTP não configurado — notificação por e-mail ignorada.")
+        if not resend_key:
+            logger.warning("RESEND_API_KEY não configurado — notificação ignorada.")
             return
 
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = subject
-        msg["From"] = smtp_user
-        msg["To"] = notify_email
-        msg.attach(MIMEText(body, "html"))
+        payload = json_lib.dumps({
+            "from": "NexoMoc <onboarding@resend.dev>",
+            "to": [notify_email],
+            "subject": subject,
+            "html": body
+        }).encode()
 
-        with smtplib.SMTP("smtp.gmail.com", 587, timeout=10) as server:
-            server.ehlo()
-            server.starttls()
-            server.ehlo()
-            server.login(smtp_user, smtp_pass)
-            server.sendmail(smtp_user, notify_email, msg.as_string())
-        logger.info(f"E-mail enviado: {subject}")
+        req = urllib.request.Request(
+            "https://api.resend.com/emails",
+            data=payload,
+            headers={
+                "Authorization": f"Bearer {resend_key}",
+                "Content-Type": "application/json"
+            },
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            logger.info(f"E-mail enviado via Resend: {subject} — status {resp.status}")
     except Exception as e:
         logger.error(f"Erro ao enviar e-mail: {e}")
 
