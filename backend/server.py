@@ -689,6 +689,14 @@ async def list_all_demands():
     docs = await db.client_demands.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
     return docs
 
+@api_router.delete("/admin/registrations/cleanup")
+async def cleanup_test_registrations(keep: str = ""):
+    """Remove registros de teste, mantendo os IDs informados em keep (separados por virgula)."""
+    keep_ids = [i.strip() for i in keep.split(",") if i.strip()]
+    query = {"registration_id": {"$nin": keep_ids}} if keep_ids else {}
+    result = await db.freelancer_registrations.delete_many(query)
+    return {"deleted": result.deleted_count, "kept": keep_ids}
+
 @api_router.post("/client-demand", status_code=201)
 async def submit_client_demand(data: ClientDemandForm):
     doc = data.dict()
