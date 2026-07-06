@@ -36,27 +36,32 @@ db = client[os.environ['DB_NAME']]
 # --- EMAIL NOTIFICATION ---
 def _send_email_worker(subject: str, body: str):
     try:
-        smtp_user = os.environ.get('SMTP_USER', '')
-        smtp_pass = os.environ.get('SMTP_PASS', '')
-        notify_email = os.environ.get('NOTIFY_EMAIL', 'contato.nexomoc@gmail.com')
+        resend_key = os.environ.get('RESEND_API_KEY', '')
+        notify_email = os.environ.get('NOTIFY_EMAIL', 'iggormorais42@gmail.com')
 
-        if not smtp_user or not smtp_pass:
-            logger.warning("SMTP não configurado — notificação ignorada.")
+        if not resend_key:
+            logger.warning("RESEND_API_KEY não configurado — notificação ignorada.")
             return
 
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = subject
-        msg["From"] = smtp_user
-        msg["To"] = notify_email
-        msg.attach(MIMEText(body, "html"))
+        payload = json_lib.dumps({
+            "from": "NexoMoc <onboarding@resend.dev>",
+            "to": [notify_email],
+            "subject": subject,
+            "html": body
+        }).encode("utf-8")
 
-        with smtplib.SMTP("smtp-relay.brevo.com", 587, timeout=15) as server:
-            server.ehlo()
-            server.starttls()
-            server.ehlo()
-            server.login(smtp_user, smtp_pass)
-            server.sendmail(smtp_user, notify_email, msg.as_string())
-        logger.info(f"E-mail enviado via Brevo: {subject}")
+        req = urllib.request.Request(
+            "https://api.resend.com/emails",
+            data=payload,
+            headers={
+                "Authorization": f"Bearer {resend_key}",
+                "Content-Type": "application/json"
+            },
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            result = resp.read().decode()
+            logger.info(f"E-mail enviado via Resend: {subject} — {result}")
     except Exception as e:
         logger.error(f"Erro ao enviar e-mail: {e}")
 
@@ -166,6 +171,32 @@ async def root():
         "version": "1.0.0"
     }
 
+@api_router.get("/test-email")
+async def test_email():
+    """Endpoint de diagnóstico para testar envio de e-mail."""
+    import urllib.request, json as json_lib
+    resend_key = os.environ.get('RESEND_API_KEY', '')
+    notify_email = os.environ.get('NOTIFY_EMAIL', 'iggormorais42@gmail.com')
+    if not resend_key:
+        return {"status": "erro", "detalhe": "RESEND_API_KEY não configurado"}
+    try:
+        payload = json_lib.dumps({
+            "from": "NexoMoc <onboarding@resend.dev>",
+            "to": [notify_email],
+            "subject": "[NexoMoc] Teste diagnóstico",
+            "html": "<h2>Teste direto do Railway</h2>"
+        }).encode("utf-8")
+        req = urllib.request.Request(
+            "https://api.resend.com/emails",
+            data=payload,
+            headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            result = resp.read().decode()
+            return {"status": "enviado", "resposta": result, "para": notify_email}
+    except Exception as e:
+        return {"status": "erro", "detalhe": str(e)}
 
 # --- OAUTH AUTH CALLBACK AND SESSION MANAGEMENT ---
 
