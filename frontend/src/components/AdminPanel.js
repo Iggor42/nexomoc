@@ -144,6 +144,8 @@ function PendingCard({ reg, password, onApproved, onRejected }) {
 function PublishedCard({ freelancer, password, onDeleted, onUpdated }) {
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(freelancer.picture || "");
+  const [photoFile, setPhotoFile] = useState(null);
   const [form, setForm] = useState({
     name: freelancer.name || "",
     bio: freelancer.bio || "",
@@ -154,15 +156,47 @@ function PublishedCard({ freelancer, password, onDeleted, onUpdated }) {
     picture: freelancer.picture || "",
   });
 
+  const handlePhotoSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Imagem muito grande. Máximo 2MB.");
+      return;
+    }
+    setPhotoFile(file);
+    setPhotoPreview(URL.createObjectURL(file));
+  };
+
+  const uploadPhoto = async () => {
+    if (!photoFile) return null;
+    const fd = new FormData();
+    fd.append("password", password);
+    fd.append("file", photoFile);
+    const res = await axios.post(
+      `${API}/api/admin/freelancer/${freelancer.user_id}/photo`,
+      fd,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+    return res.data.picture;
+  };
+
   const save = async () => {
     setLoading("save");
     try {
+      // Upload foto se selecionada
+      let finalPicture = form.picture;
+      if (photoFile) {
+        finalPicture = await uploadPhoto();
+      }
+      // Salvar demais campos
       await axios.patch(`${API}/api/admin/freelancer/${freelancer.user_id}`, {
         password,
         ...form,
+        picture: finalPicture,
       });
       toast.success("Atualizado!");
-      onUpdated(freelancer.user_id, form);
+      onUpdated(freelancer.user_id, { ...form, picture: finalPicture });
+      setPhotoFile(null);
       setEditing(false);
     } catch {
       toast.error("Erro ao salvar.");
@@ -188,9 +222,9 @@ function PublishedCard({ freelancer, password, onDeleted, onUpdated }) {
   return (
     <div className="bg-[#1f1f1f] border border-[#2e2e2e] rounded-xl p-5 space-y-3">
       <div className="flex items-center gap-3">
-        {(form.picture || freelancer.picture) ? (
+        {(photoPreview || form.picture) ? (
           <img
-            src={form.picture || freelancer.picture}
+            src={photoPreview || form.picture}
             alt={form.name}
             className="w-12 h-12 rounded-full object-cover border border-[#2e2e2e]"
             onError={(e) => { e.target.style.display = 'none' }}
@@ -229,7 +263,6 @@ function PublishedCard({ freelancer, password, onDeleted, onUpdated }) {
             { label: "Instagram", key: "instagram" },
             { label: "Cidade/Bairro", key: "city_neighborhood" },
             { label: "Atende remoto", key: "remote" },
-            { label: "Foto (URL)", key: "picture" },
           ].map(({ label, key }) => (
             <div key={key}>
               <label className="text-[#555] text-xs">{label}</label>
@@ -240,6 +273,35 @@ function PublishedCard({ freelancer, password, onDeleted, onUpdated }) {
               />
             </div>
           ))}
+          {/* Upload de foto */}
+          <div>
+            <label className="text-[#555] text-xs">Foto do prestador</label>
+            <div className="mt-1 flex items-center gap-3">
+              {photoPreview && (
+                <img
+                  src={photoPreview}
+                  alt="preview"
+                  className="w-12 h-12 rounded-full object-cover border border-[#2e2e2e]"
+                />
+              )}
+              <label className="flex-1 cursor-pointer bg-[#191919] border border-dashed border-[#465242] text-[#E0DCD1] px-3 py-2 rounded-lg text-sm text-center hover:bg-[#1a1a1a] transition">
+                {photoFile ? photoFile.name : "Clique para escolher uma imagem"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handlePhotoSelect}
+                />
+              </label>
+            </div>
+            <p className="text-[#555] text-xs mt-1">Ou cole uma URL abaixo</p>
+            <input
+              value={form.picture}
+              onChange={(e) => { setForm({ ...form, picture: e.target.value }); setPhotoPreview(e.target.value); setPhotoFile(null); }}
+              placeholder="https://..."
+              className="w-full bg-[#191919] border border-[#2e2e2e] text-[#E0DCD1] px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-[#465242] mt-1"
+            />
+          </div>
           <div>
             <label className="text-[#555] text-xs">Descrição / Bio</label>
             <textarea
