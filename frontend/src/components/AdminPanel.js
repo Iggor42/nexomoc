@@ -142,6 +142,17 @@ function PendingCard({ reg, password, onApproved, onRejected }) {
 
 // ── Card de prestador publicado ───────────────────────────────────────────────
 function PublishedCard({ freelancer, password, onDeleted, onUpdated }) {
+  const CATEGORIES = [
+    "Design e Tecnologia",
+    "Construção e Reformas",
+    "Beleza e Bem-Estar",
+    "Saúde e Bem-estar",
+    "Serviços Domésticos",
+    "Educação e Aulas",
+    "Eventos e Entretenimento",
+    "Outros",
+  ];
+
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(freelancer.picture || "");
@@ -193,6 +204,7 @@ function PublishedCard({ freelancer, password, onDeleted, onUpdated }) {
         password,
         ...form,
         picture: finalPicture,
+        ...(form.category ? { categories: [form.category] } : {}),
       });
       toast.success("Atualizado!");
       onUpdated(freelancer.user_id, { ...form, picture: finalPicture });
@@ -273,6 +285,20 @@ function PublishedCard({ freelancer, password, onDeleted, onUpdated }) {
               />
             </div>
           ))}
+          {/* Categoria */}
+          <div>
+            <label className="text-[#555] text-xs">Categoria</label>
+            <select
+              value={form.category || freelancer.categories?.[0] || ""}
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
+              className="w-full bg-[#191919] border border-[#2e2e2e] text-[#E0DCD1] px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-[#465242] mt-1"
+            >
+              <option value="">Selecione uma categoria</option>
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+          </div>
           {/* Upload de foto */}
           <div>
             <label className="text-[#555] text-xs">Foto do prestador</label>
