@@ -204,7 +204,6 @@ export default function Home() {
   alt="NexoMoc"
   className="h-8 w-auto object-contain"
 />
-            <span className="font-light tracking-[0.25em] text-sm uppercase">NexoMoc</span>
           </Link>
 
           {/* Desktop Nav Links */}
@@ -341,7 +340,9 @@ export default function Home() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight text-[#E0DCD1] leading-tight uppercase mb-6 max-w-3xl">
-            A conexão local que movimenta Montes Claros
+            A conexão local<br />
+Que movimenta<br />
+Montes Claros
           </h1>
 
           <p className="text-base sm:text-lg text-rgba(224, 220, 209, 0.75) font-light tracking-wide italic max-w-2xl mb-12">
