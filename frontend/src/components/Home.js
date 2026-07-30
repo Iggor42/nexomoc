@@ -52,14 +52,18 @@ export default function Home() {
   // Per-category professional counts (for featured categories)
   const [categoryCounts, setCategoryCounts] = useState({});
 
-  const categories = [
+    const categories = [
     "Todos",
     "Construção e Reformas",
     "Design e Tecnologia",
     "Beleza e Bem-Estar",
     "Educação",
+    "Eventos e Audiovisual",
+    "Saúde",
+    "Automotivo",
     "Serviços Domésticos"
   ];
+
 
   // Fetch freelancers
   useEffect(() => {
@@ -210,7 +214,7 @@ export default function Home() {
               }}
               className="hover:text-[#bebaa9] transition-colors"
             >
-              Encontrar Profissionais
+              Encontrar uma solução
             </a>
             <Link to="/vagas" data-testid="nav-link-vagas" className="hover:text-[#bebaa9] transition-colors">
               Painel de Vagas
@@ -224,7 +228,7 @@ export default function Home() {
               }}
               className="hover:text-[#bebaa9] transition-colors flex items-center gap-1.5"
             >
-              <PlusCircle className="w-4 h-4" /> Anunciar Vaga
+              <PlusCircle className="w-4 h-4" /> Publicar demanda
             </a>
           </nav>
 
@@ -244,7 +248,7 @@ export default function Home() {
                 data-testid="navbar-login-btn"
                 className="px-5 py-2 bg-[#E0DCD1] text-[#191919] text-xs uppercase tracking-wider font-bold border border-[#E0DCD1] hover:bg-transparent hover:text-[#E0DCD1] transition-all"
               >
-                Cadastrar serviço
+                Quero ser encontrado
               </Link>
             )}
           </div>
@@ -272,7 +276,7 @@ export default function Home() {
               }}
               className="hover:text-[#bebaa9] py-2 border-b border-[#465242]/20"
             >
-              Encontrar Profissionais
+              Encontrar uma solução
             </a>
             <Link 
               to="/vagas" 
@@ -312,7 +316,7 @@ export default function Home() {
                   data-testid="mobile-navbar-login-btn"
                   className="w-full text-center px-5 py-2.5 bg-[#E0DCD1] text-[#191919] text-xs uppercase tracking-wider font-bold border border-[#E0DCD1] hover:bg-transparent hover:text-[#E0DCD1] transition-all"
                 >
-                  Cadastrar serviço
+                  Quero ser encontrado
                 </Link>
               )}
             </div>
@@ -325,15 +329,15 @@ export default function Home() {
         <div className="max-w-4xl mx-auto flex flex-col items-center">
           <div className="flex items-center gap-2 mb-8">
             <NexoSymbol size={24} />
-            <span className="text-xs uppercase tracking-[0.3em] font-light">NexoMoc Marketplace</span>
+            <span className="text-xs uppercase tracking-[0.3em] font-light">Solução Local</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight text-[#E0DCD1] leading-tight uppercase mb-6 max-w-3xl">
-            O seu marketplace de serviços em Montes Claros
+            A conexão local que movimenta Montes Claros
           </h1>
 
           <p className="text-base sm:text-lg text-rgba(224, 220, 209, 0.75) font-light tracking-wide italic max-w-2xl mb-12">
-            Conectando quem precisa de soluções rápidas aos melhores profissionais autônomos locais. Rápido e sem burocracia.
+            Encontre soluções, profissionais e oportunidades na cidade. Rápido e sem burocracia.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center">
@@ -342,14 +346,14 @@ export default function Home() {
               data-testid="hero-primary-cta"
               className="px-8 py-4 bg-[#E0DCD1] text-[#191919] text-xs uppercase tracking-widest font-bold border border-[#E0DCD1] hover:bg-transparent hover:text-[#E0DCD1] transition-all"
             >
-              Preciso contratar
+              Encontrar uma solução
             </button>
             <button 
               onClick={handleHeroProvideServiceClick}
               data-testid="hero-secondary-cta"
               className="px-8 py-4 border border-[#465242] text-[#E0DCD1] text-xs uppercase tracking-widest font-bold bg-[#191919]/50 hover:bg-[#465242] transition-all"
             >
-              Quero divulgar meu serviço
+              Quero ser encontrado
             </button>
           </div>
         </div>
@@ -362,7 +366,7 @@ export default function Home() {
       <section className="bg-[#E0DCD1] text-[#191919] py-16 px-6">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-xs uppercase tracking-[0.25em] text-[#191919]/60 mb-12 font-bold">
-            O mercado que você vive — Montes Claros, MG
+            Montes Claros está em movimento
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
@@ -381,7 +385,7 @@ export default function Home() {
           </div>
 
           <p className="text-base sm:text-lg italic text-[#191919]/80 font-light max-w-2xl mx-auto border-t border-[#191919]/10 pt-8">
-            A demanda por serviços existe. Os talentos locais estão aqui. O NexoMoc é a ponte direta de conexão.
+            A cidade tem demanda. A cidade tem talento. O NexoMoc aproxima os dois.
           </p>
         </div>
       </section>
@@ -391,10 +395,10 @@ export default function Home() {
         <div className="text-center mb-16">
           <span className="text-xs uppercase tracking-[0.25em] text-muted-foreground block mb-3">Explore por Área</span>
           <h2 className="text-3xl font-light uppercase tracking-wide text-[#E0DCD1] mb-6">
-            Categorias em destaque
+            Encontre uma solução local
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground font-light max-w-2xl mx-auto">
-            Encontre o profissional certo em um clique. Escolha a categoria e veja os talentos locais disponíveis.
+            Encontre profissionais, empresas e soluções locais por área.
           </p>
         </div>
 
@@ -472,16 +476,63 @@ export default function Home() {
           <Link to="/ti-tecnologia-montes-claros" data-testid="popular-link-ti" className="text-[11px] uppercase tracking-widest px-4 py-2 border border-[#465242] hover:border-[#E0DCD1] hover:text-white transition-all">TI e Tecnologia</Link>
         </div>
       </section>
+      {/* RADAR DE OPORTUNIDADES */}
+      <section className="py-24 px-6 bg-[#191919] border-t border-[#465242]">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8">
+          <div className="border border-[#465242] bg-[#1f1f1f] p-8 sm:p-12 flex flex-col justify-between">
+            <div>
+              <span className="text-xs uppercase tracking-[0.25em] text-[#bebaa9] block mb-5">
+                Radar de oportunidades
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-light uppercase tracking-wide leading-tight mb-6">
+                A próxima oportunidade pode estar em Montes Claros.
+              </h2>
+              <p className="text-sm sm:text-base text-[#E0DCD1]/70 font-light leading-relaxed">
+                Demandas, trabalhos e conexões locais para quem procura uma solução
+                — e para quem está pronto para entregar.
+              </p>
+            </div>
+            <Link
+              to="/vagas"
+              className="mt-10 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#E0DCD1] hover:text-[#bebaa9] transition-colors"
+            >
+              Ver oportunidades
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
 
+          <div className="border border-[#465242] p-8 sm:p-12 flex flex-col justify-between bg-[#E0DCD1] text-[#191919]">
+            <div>
+              <span className="text-xs uppercase tracking-[0.25em] text-[#191919]/60 block mb-5">
+                Você precisa de uma solução?
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-light uppercase tracking-wide leading-tight mb-6">
+                Publique sua demanda.
+              </h2>
+              <p className="text-sm sm:text-base text-[#191919]/70 font-light leading-relaxed">
+                Explique o que você precisa. O NexoMoc ajuda sua demanda a chegar
+                aos profissionais certos.
+              </p>
+            </div>
+            <a
+              href="#anunciar-vaga"
+              className="mt-10 inline-flex items-center gap-2 text-xs uppercase tracking-widest font-bold hover:opacity-60 transition-opacity"
+            >
+              Publicar uma demanda
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+      </section>
       {/* FREELANCER DIRECTORY SECTION */}
       <section id="freelancer-directory" className="py-24 px-6 max-w-7xl mx-auto scroll-mt-20">
         <div className="text-center mb-16">
           <span className="text-xs uppercase tracking-[0.25em] text-muted-foreground block mb-3">Diretório de Talentos</span>
           <h2 className="text-3xl font-light uppercase tracking-wide text-[#E0DCD1] mb-6">
-            Encontre o profissional certo
+            Encontre quem resolve
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground font-light max-w-2xl mx-auto">
-            Filtre os melhores prestadores por categoria ou faça uma busca por palavras-chave como nomes ou termos específicos.
+            Busque por categoria, serviço ou nome e encontre soluções locais.
           </p>
         </div>
 
@@ -532,7 +583,7 @@ export default function Home() {
             <Users className="w-10 h-10 text-muted-foreground mx-auto mb-4" />
             <h3 className="font-bold mb-2">Nenhum profissional cadastrado nesta categoria</h3>
             <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto">
-              Seja o primeiro a divulgar serviços nessa categoria! Cadastre-se agora clicando no botão &quot;Quero divulgar meu serviço&quot; acima.
+              Seja o primeiro profissional desta categoria! Cadastre-se agora clicando no botão &quot;Quero ser encontrado&quot; acima.
             </p>
           </div>
         ) : (
@@ -609,7 +660,7 @@ export default function Home() {
         )}
       </section>
 
-      {/* ANUNCIAR VAGA / DEMANDA FORM SECTION */}
+      {/* PUBLICAR DEMANDA SECTION */}
       <section id="anunciar-vaga" className="bg-[#1f1f1f] border-t border-b border-[#465242] py-24 px-6 scroll-mt-20">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
@@ -754,29 +805,86 @@ export default function Home() {
           </form>
         </div>
       </section>
+      {/* PROVA SOCIAL / REDE LOCAL */}
+      <section className="py-24 px-6 bg-[#1f1f1f] border-t border-b border-[#465242]">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12">
+            <div>
+              <span className="text-xs uppercase tracking-[0.25em] text-[#bebaa9] block mb-3">
+                Rede local em construção
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-light uppercase tracking-wide text-[#E0DCD1] mb-5">
+                Gente real. Soluções reais.
+              </h2>
+              <p className="text-sm sm:text-base text-[#E0DCD1]/65 font-light max-w-2xl leading-relaxed">
+                Conheça profissionais que já estão construindo essa rede em Montes Claros.
+                O cadastro é gratuito e o contato acontece diretamente.
+              </p>
+            </div>
 
+            <div className="border border-[#465242] px-8 py-5 text-center min-w-[180px]">
+              <span className="block text-4xl font-light text-[#E0DCD1]">
+                {categoryCounts["Todos"] || freelancers.length}
+              </span>
+              <span className="block text-[10px] uppercase tracking-[0.2em] text-[#E0DCD1]/60 mt-1">
+                profissionais encontrados
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+            <div className="border-t border-[#465242] pt-5">
+              <span className="block text-xs uppercase tracking-widest text-[#E0DCD1]">
+                Contato direto
+              </span>
+              <span className="block text-xs text-[#E0DCD1]/50 mt-2">
+                Converse diretamente com quem faz
+              </span>
+            </div>
+
+            <div className="border-t border-[#465242] pt-5">
+              <span className="block text-xs uppercase tracking-widest text-[#E0DCD1]">
+                Cadastro gratuito
+              </span>
+              <span className="block text-xs text-[#E0DCD1]/50 mt-2">
+                Para profissionais de Montes Claros
+              </span>
+            </div>
+
+            <div className="border-t border-[#465242] pt-5">
+              <span className="block text-xs uppercase tracking-widest text-[#E0DCD1]">
+                Curadoria local
+              </span>
+              <span className="block text-xs text-[#E0DCD1]/50 mt-2">
+                Uma rede feita para a cidade
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
       {/* HOW IT WORKS SECTION */}
       <section className="py-24 px-6 max-w-7xl mx-auto text-center">
         <span className="text-xs uppercase tracking-[0.25em] text-muted-foreground block mb-3">Como Funciona</span>
         <h2 className="text-3xl font-light uppercase tracking-wide text-[#E0DCD1] mb-16">
-          Simples de ponta a ponta
+          Uma conexão simples e local
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
           {/* For Clients */}
           <div className="bg-[#1f1f1f] border border-[#465242] p-8 text-left space-y-6">
             <h3 className="text-lg font-bold text-[#E0DCD1] uppercase tracking-wide border-b border-[#465242] pb-3">
-              Para quem quer Contratar
+              Para quem precisa resolver
             </h3>
             <ol className="space-y-4 text-sm font-light text-muted-foreground list-decimal pl-5">
               <li>
-                <strong className="text-[#E0DCD1]">Descreva o que precisa:</strong> Preencha o formulário rápido com as informações básicas do seu projeto sem se preocupar em criar senhas.
+                <strong className="text-[#E0DCD1]">Conte o que precisa:</strong> Explique sua demanda com as informações essenciais, sem burocracia e sem criar uma conta.
               </li>
               <li>
-                <strong className="text-[#E0DCD1]">Busque talentos locais:</strong> Se preferir, navegue diretamente pelo nosso diretório e filtre por qualificações e avaliações.
+                <strong className="text-[#E0DCD1]">Encontre soluções locais:</strong> Explore profissionais e serviços por categoria ou pesquise diretamente pelo que você procura.
+
               </li>
               <li>
-                <strong className="text-[#E0DCD1]">Feche o negócio:</strong> Chame o freelancer no WhatsApp com apenas um clique e acerte os detalhes diretamente com ele. Contato direto com o profissional.
+                <strong className="text-[#E0DCD1]">Converse diretamente:</strong> Entre em contato pelo WhatsApp, alinhe os detalhes e decida com quem fechar.
               </li>
             </ol>
           </div>
@@ -784,17 +892,18 @@ export default function Home() {
           {/* For Freelancers */}
           <div className="bg-[#1f1f1f] border border-[#465242] p-8 text-left space-y-6">
             <h3 className="text-lg font-bold text-[#E0DCD1] uppercase tracking-wide border-b border-[#465242] pb-3">
-              Para o Prestador / Freelancer
+             Para quem oferece soluções
             </h3>
             <ol className="space-y-4 text-sm font-light text-muted-foreground list-decimal pl-5">
               <li>
-                <strong className="text-[#E0DCD1]">Crie seu perfil:</strong> Faça login com sua conta do Google e monte seu perfil de serviços e portfólio de forma intuitiva.
+                <strong className="text-[#E0DCD1]">Apresente seu trabalho:</strong> Cadastre seu perfil, seus serviços e seu portfólio para ser encontrado por pessoas da cidade.
               </li>
               <li>
-                <strong className="text-[#E0DCD1]">Veja oportunidades:</strong> Acesse o &quot;Painel de Vagas&quot; para ver o que os clientes de Montes Claros estão precisando em tempo real.
+                <strong className="text-[#E0DCD1]">Acompanhe oportunidades:</strong> Consulte as demandas publicadas por clientes de Montes Claros e identifique onde você pode ajudar.
+
               </li>
               <li>
-                <strong className="text-[#E0DCD1]">Feche novos clientes:</strong> Responda às vagas propostas ou seja encontrado por novos contratantes e aumente seu faturamento!
+                <strong className="text-[#E0DCD1]">Construa novas conexões:</strong> Responda às demandas e seja encontrado por novos clientes que procuram exatamente o que você oferece.
               </li>
             </ol>
           </div>
