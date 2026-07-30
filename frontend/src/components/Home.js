@@ -199,7 +199,11 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-[#191919]/90 backdrop-blur-md border-b border-[#465242] px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link to="/" data-testid="navbar-logo-link" className="flex items-center gap-3">
-            <NexoSymbol size={32} />
+            <img
+  src="/nexomoc-logo.png"
+  alt="NexoMoc"
+  className="h-8 w-auto object-contain"
+/>
             <span className="font-light tracking-[0.25em] text-sm uppercase">NexoMoc</span>
           </Link>
 
@@ -328,7 +332,11 @@ export default function Home() {
       <section className="relative min-h-[85vh] flex flex-col items-center justify-center text-center px-6 py-20 bg-cover bg-center" style={{ backgroundImage: `linear-gradient(rgba(25, 25, 25, 0.92), rgba(25, 25, 25, 0.95)), url("https://images.unsplash.com/photo-1650661926447-9efb2610f64c?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=80&w=1200")` }}>
         <div className="max-w-4xl mx-auto flex flex-col items-center">
           <div className="flex items-center gap-2 mb-8">
-            <NexoSymbol size={24} />
+            <img
+  src="/nexomoc-logo.png"
+  alt="NexoMoc"
+  className="h-12 w-auto object-contain"
+/>
             <span className="text-xs uppercase tracking-[0.3em] font-light">Solução Local</span>
           </div>
 
@@ -814,7 +822,7 @@ export default function Home() {
                 Rede local em construção
               </span>
               <h2 className="text-3xl sm:text-4xl font-light uppercase tracking-wide text-[#E0DCD1] mb-5">
-                Gente real. Soluções reais.
+                Gente da nossa terra, soluções reais.
               </h2>
               <p className="text-sm sm:text-base text-[#E0DCD1]/65 font-light max-w-2xl leading-relaxed">
                 Conheça profissionais que já estão construindo essa rede em Montes Claros.
