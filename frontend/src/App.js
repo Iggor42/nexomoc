@@ -23,6 +23,7 @@ function App() {
             <Route path="/freelancer/:user_id" element={<FreelancerProfile />} />
             <Route path="/cadastrar-servico" element={<FreelancerForm />} />
             <Route path="/preciso-de-servico" element={<ClientForm />} />
+            <Route path="/demanda" element={<ClientForm />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/vagas" element={<VagasBoard />} />
             {CATEGORY_SLUGS.map((slug) => (
