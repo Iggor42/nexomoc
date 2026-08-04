@@ -77,7 +77,7 @@ export default function ClientForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!form.name || !form.service_type || !form.demand_description || !form.whatsapp) {
+    if (!form.company || !form.name || !form.service_type || !form.demand_description || !form.opportunity_type || !form.deadline || !form.city_region || !form.whatsapp) {
       toast.error("Preencha os campos obrigatórios para enviar sua demanda.");
       return;
     }
