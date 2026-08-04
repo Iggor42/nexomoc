@@ -16,6 +16,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
+from html import escape
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional
 
@@ -654,10 +655,14 @@ class ClientDemandForm(BaseModel):
     company: Optional[str] = ""
     service_type: str
     demand_description: str
+    opportunity_type: Optional[str] = ""
     deadline: Optional[str] = ""
-    work_format: str
+    city_region: Optional[str] = "Montes Claros"
+    budget: Optional[str] = ""
+    work_format: str = "Presencial"
     whatsapp: str
-    allow_publish: str
+    allow_publish: str = "Não"
+    allow_contact: bool = False
 
 @api_router.post("/freelancer-registration", status_code=201)
 async def register_freelancer(data: FreelancerRegistration):
@@ -844,6 +849,9 @@ async def upload_freelancer_photo(
 
 @api_router.post("/client-demand", status_code=201)
 async def submit_client_demand(data: ClientDemandForm):
+    if not data.allow_contact:
+        raise HTTPException(status_code=400, detail="É necessário autorizar o contato do NexoMoc.")
+
     doc = data.dict()
     doc["demand_id"] = f"dem_{uuid.uuid4().hex[:12]}"
     doc["status"] = "pending"
@@ -851,18 +859,27 @@ async def submit_client_demand(data: ClientDemandForm):
     await db.client_demands.insert_one(doc)
     logger.info(f"Nova demanda de cliente: {data.name} — {data.service_type}")
 
+    def safe(value):
+        return escape(str(value or "—"))
+
     body = f"""
-    <h2 style="color:#465242">Nova Demanda de Contratante — NexoMoc</h2>
-    <table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;width:100%">
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Nome</b></td><td style="padding:8px;border:1px solid #ddd">{data.name}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Empresa</b></td><td style="padding:8px;border:1px solid #ddd">{data.company or '—'}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Tipo de serviço</b></td><td style="padding:8px;border:1px solid #ddd">{data.service_type}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Descrição</b></td><td style="padding:8px;border:1px solid #ddd">{data.demand_description}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Prazo</b></td><td style="padding:8px;border:1px solid #ddd">{data.deadline or '—'}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Formato</b></td><td style="padding:8px;border:1px solid #ddd">{data.work_format}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>WhatsApp</b></td><td style="padding:8px;border:1px solid #ddd">{data.whatsapp}</td></tr>
-      <tr><td style="padding:8px;border:1px solid #ddd"><b>Autoriza publicar</b></td><td style="padding:8px;border:1px solid #ddd">{data.allow_publish}</td></tr>
-    </table>
+    <div style="font-family:sans-serif;max-width:680px;margin:0 auto">
+      <h2 style="color:#465242">Nova demanda de contratante — NexoMoc</h2>
+      <table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;width:100%">
+        <tr><td style="padding:8px;border:1px solid #ddd"><b>Empresa</b></td><td style="padding:8px;border:1px solid #ddd">{safe(data.company)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #ddd"><b>Responsável</b></td><td style="padding:8px;border:1px solid #ddd">{safe(data.name)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #ddd"><b>WhatsApp ou e-mail</b></td><td style="padding:8px;border:1px solid #ddd">{safe(data.whatsapp)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #ddd"><b>Categoria</b></td><td style="padding:8px;border:1px solid #ddd">{safe(data.service_type)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #ddd;vertical-align:top"><b>Descrição</b></td><td style="padding:8px;border:1px solid #ddd;white-space:pre-wrap">{safe(data.demand_description)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #ddd"><b>Tipo de oportunidade</b></td><td style="padding:8px;border:1px solid #ddd">{safe(data.opportunity_type)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #ddd"><b>Prazo</b></td><td style="padding:8px;border:1px solid #ddd">{safe(data.deadline)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #ddd"><b>Cidade/região</b></td><td style="padding:8px;border:1px solid #ddd">{safe(data.city_region)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #ddd"><b>Faixa de investimento</b></td><td style="padding:8px;border:1px solid #ddd">{safe(data.budget)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #ddd"><b>Formato</b></td><td style="padding:8px;border:1px solid #ddd">{safe(data.work_format)}</td></tr>
+        <tr><td style="padding:8px;border:1px solid #ddd"><b>Autorizou contato</b></td><td style="padding:8px;border:1px solid #ddd">{'Sim' if data.allow_contact else 'Não'}</td></tr>
+      </table>
+      <p style="color:#888;font-size:12px;margin-top:16px">NexoMoc — Conectando quem precisa a quem faz.</p>
+    </div>
     """
     send_email_notification(f"[NexoMoc] Nova demanda: {data.service_type} — {data.name}", body)
 
